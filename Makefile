@@ -1,5 +1,5 @@
-kjv: kjv_logic.sh kjv.awk kjv.tsv
-	cat kjv_logic.sh > $@
+kjv: kjv.sh kjv.awk kjv.tsv
+	cat kjv.sh > $@
 
 	echo 'exit 0' >> $@
 
@@ -13,7 +13,7 @@ kjv: kjv_logic.sh kjv.awk kjv.tsv
 
 	chmod +x $@
 
-test: kjv kjv_logic.sh
-	shellcheck -s sh kjv_logic.sh
+test: kjv.sh
+	shellcheck -s sh kjv.sh
 
 .PHONY: test
