@@ -93,13 +93,6 @@ cmd == "list" {
 	}
 }
 
-function beforeprintverse(book, bookabbr) {
-	if (last_book_printed != bookabbr) {
-		print $1
-		last_book_printed = bookabbr
-	}
-}
-
 function printverse(verse,    word_count, characters_printed) {
 	word_count = split(verse, words, " ")
 	for (i = 1; i <= word_count; i++) {
@@ -118,7 +111,11 @@ function printverse(verse,    word_count, characters_printed) {
 }
 
 function processline() {
-	beforeprintverse($1, $2)
+	if (last_book_printed != $2) {
+		print $1
+		last_book_printed = $2
+	}
+
 	printf("%d:%d\t", $4, $5)
 	printverse($6)
 	outputted_records++
