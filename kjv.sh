@@ -5,7 +5,7 @@
 SELF="$0"
 
 get_data() {
-	sed -n "/^##$1##$/,/^##\\/$1##$/p" < "$SELF" | tail -n +2 | head -n -1 | base64 -d | gunzip -c
+	sed '1,/^#EOF$/d' < "$SELF" | tar xz -O "$1"
 }
 
 if [ -z "$PAGER" ]; then
@@ -28,7 +28,7 @@ while [ $# -gt 0 ]; do
 		break
 	elif [ "$1" = "-l" ]; then
 		# List all book names with their abbreviations
-		get_data BIBLE | awk -v cmd=list -e "$(get_data SCRIPT)"
+		get_data kjv.tsv | awk -v cmd=list -e "$(get_data kjv.awk)"
 		exit
 	elif [ "$1" = "-h" ] || [ "$isFlag" -eq 1 ]; then
 		exec >&2
@@ -69,5 +69,5 @@ startIdx=$#
 	fi
 	ref="$1"
 	shift
-	get_data BIBLE | awk -v cmd=ref -v ref="$ref" -e "$(get_data SCRIPT)"
+	get_data kjv.tsv | awk -v cmd=ref -v ref="$ref" -e "$(get_data kjv.awk)"
 done ) | ${PAGER}
