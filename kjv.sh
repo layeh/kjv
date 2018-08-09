@@ -16,6 +16,36 @@ if [ -z "$PAGER" ]; then
 	fi
 fi
 
+function help() {
+	exec >&2
+	echo "usage: $0 [flags] <references...>"
+	echo
+	echo "  -l      list books"
+	echo "  -h      show help"
+	echo
+	echo "  References types:"
+	echo "      {Book}"
+	echo "          Individual book"
+	echo "      {Book}:{Chapter}"
+	echo "          Individual chapter of a book"
+	echo "      {Book}:{Chapter}:{Verse}"
+	echo "          Individual verse of a specific chapter of a book"
+	echo "      {Book}:{Chapter}-{Chapter}"
+	echo "          Range of chapters in a book"
+	echo "      {Book}:{Chapter}:{Verse}-{Verse}"
+	echo "          Range of verses in a book chapter"
+	echo "      {Book}:{Chapter}:{Verse}-{Chapter}:{Verse}"
+	echo "          Range of chapters and verses in a book"
+	echo
+	echo "      /{Search}"
+	echo "          All verses that match a pattern"
+	echo "      {Book}/{Search}"
+	echo "          All verses in a book that match a pattern"
+	echo "      {Book}:{Chapter}/{Search}"
+	echo "          All verses in a chapter of a book that match a pattern"
+	exit 2
+}
+
 while [ $# -gt 0 ]; do
 	isFlag=0
 	firstChar="${1%"${1#?}"}"
@@ -31,36 +61,14 @@ while [ $# -gt 0 ]; do
 		get_data kjv.tsv | awk -v cmd=list "$(get_data kjv.awk)"
 		exit
 	elif [ "$1" = "-h" ] || [ "$isFlag" -eq 1 ]; then
-		exec >&2
-		echo "usage: $0 [flags] <references...>"
-		echo
-		echo "  -l      list books"
-		echo "  -h      show help"
-		echo
-		echo "  References types:"
-		echo "      {Book}"
-		echo "          Individual book"
-		echo "      {Book}:{Chapter}"
-		echo "          Individual chapter of a book"
-		echo "      {Book}:{Chapter}:{Verse}"
-		echo "          Individual verse of a specific chapter of a book"
-		echo "      {Book}:{Chapter}-{Chapter}"
-		echo "          Range of chapters in a book"
-		echo "      {Book}:{Chapter}:{Verse}-{Verse}"
-		echo "          Range of verses in a book chapter"
-		echo "      {Book}:{Chapter}:{Verse}-{Chapter}:{Verse}"
-		echo "          Range of chapters and verses in a book"
-		echo
-		echo "      /{Search}"
-		echo "          All verses that match a pattern"
-		echo "      {Book}/{Search}"
-		echo "          All verses in a book that match a pattern"
-		echo "      {Book}:{Chapter}/{Search}"
-		echo "          All verses in a chapter of a book that match a pattern"
-		exit 2
+		help
 	fi
 	break
 done
+
+if [ $# -eq 0 ]; then
+	help
+fi
 
 startIdx=$#
 (while [ $# -gt 0 ]; do
