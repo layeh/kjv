@@ -8,18 +8,18 @@ BEGIN {
 	FS = "\t"
 
 	if (cmd == "ref") {
-		if (match(ref, "^[a-zA-Z0-9 ]+$")) {
+		if (match(ref, "^[1-9]?[a-zA-Z ]+$")) {
 			mode = "exact"
 			r_book = tolower(ref)
 
-		} else if (match(ref, "^[a-zA-Z0-9 ]+:[0-9]+$")) {
+		} else if (match(ref, "^[1-9]?[a-zA-Z ]+:[0-9]+$")) {
 			mode = "exact"
 
 			split(ref, arr, ":")
 			r_book = tolower(arr[1])
 			r_chapter = arr[2]
 
-		} else if (match(ref, "^[a-zA-Z0-9 ]+:[0-9]+:[0-9]+$")) {
+		} else if (match(ref, "^[1-9]?[a-zA-Z ]+:[0-9]+:[0-9]+$")) {
 			mode = "exact"
 
 			split(ref, arr, ":")
@@ -27,7 +27,7 @@ BEGIN {
 			r_chapter = arr[2]
 			r_verse = arr[3]
 
-		} else if (match(ref, "^[a-zA-Z0-9 ]+:[0-9]+-[0-9]+$")) {
+		} else if (match(ref, "^[1-9]?[a-zA-Z ]+:[0-9]+-[0-9]+$")) {
 			mode = "range"
 
 			split(ref, arr, ":")
@@ -37,7 +37,7 @@ BEGIN {
 			r_chapter_lower = arr[1]
 			r_chapter_upper = arr[2]
 
-		} else if (match(ref, "^[a-zA-Z0-9 ]+:[0-9]+:[0-9]+-[0-9]+$")) {
+		} else if (match(ref, "^[1-9]?[a-zA-Z ]+:[0-9]+:[0-9]+-[0-9]+$")) {
 			mode = "range"
 
 			split(ref, arr, ":")
@@ -48,7 +48,7 @@ BEGIN {
 			r_verse_lower = arr[1]
 			r_verse_upper = arr[2]
 
-		} else if (match(ref, "^[a-zA-Z0-9 ]+:[0-9]+:[0-9]+-[0-9]+:[0-9]+$")) {
+		} else if (match(ref, "^[1-9]?[a-zA-Z ]+:[0-9]+:[0-9]+-[0-9]+:[0-9]+$")) {
 			mode = "range_ext"
 
 			split(ref, arr, ":")
@@ -65,14 +65,14 @@ BEGIN {
 
 			r_search = substr(ref, 2)
 
-		} else if (match(ref, "^[a-zA-Z0-9 ]+/")) {
+		} else if (match(ref, "^[1-9]?[a-zA-Z ]+/")) {
 			mode = "search"
 
 			i = index(ref, "/")
 			r_book = tolower(substr(ref, 1, i - 1))
 			r_search = substr(ref, i + 1)
 
-		} else if (match(ref, "^[a-zA-Z0-9 ]+:[0-9]+/")) {
+		} else if (match(ref, "^[1-9]?[a-zA-Z ]+:[0-9]+/")) {
 			mode = "search"
 
 			i = index(ref, ":")
