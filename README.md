@@ -8,24 +8,24 @@ Read the Word of God from your terminal
       -h      show help
 
       References types:
-          {Book}
+          <Book>
               Individual book
-          {Book}:{Chapter}
+          <Book>:<Chapter>
               Individual chapter of a book
-          {Book}:{Chapter}:{Verse}
+          <Book>:<Chapter>:<Verse>
               Individual verse of a specific chapter of a book
-          {Book}:{Chapter}-{Chapter}
+          <Book>:<Chapter>-<Chapter>
               Range of chapters in a book
-          {Book}:{Chapter}:{Verse}-{Verse}
+          <Book>:<Chapter>:<Verse>-<Verse>
               Range of verses in a book chapter
-          {Book}:{Chapter}:{Verse}-{Chapter}:{Verse}
+          <Book>:<Chapter>:<Verse>-<Chapter>:<Verse>
               Range of chapters and verses in a book
 
-          /{Search}
+          /<Search>
               All verses that match a pattern
-          {Book}/{Search}
+          <Book>/<Search>
               All verses in a book that match a pattern
-          {Book}:{Chapter}/{Search}
+          <Book>:<Chapter>/<Search>
               All verses in a chapter of a book that match a pattern
 
 ## License
