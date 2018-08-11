@@ -18,7 +18,7 @@ fi
 
 show_help() {
 	exec >&2
-	echo "usage: $0 [flags] <references...>"
+	echo "usage: $(basename "$0") [flags] <references...>"
 	echo
 	echo "  -l      list books"
 	echo "  -h      show help"
