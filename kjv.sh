@@ -80,7 +80,6 @@ startIdx=$#
 	if [ "${startIdx}" -ne $# ]; then
 		echo
 	fi
-	ref="$1"
+	get_data kjv.tsv | awk -v cmd=ref -v ref="$1" "$(get_data kjv.awk)"
 	shift
-	get_data kjv.tsv | awk -v cmd=ref -v ref="$ref" "$(get_data kjv.awk)"
 done ) | ${PAGER}
