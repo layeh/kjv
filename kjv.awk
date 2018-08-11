@@ -8,81 +8,8 @@ BEGIN {
 	FS = "\t"
 
 	if (cmd == "ref") {
-		if (match(ref, "^[1-9]?[a-zA-Z ]+$")) {
-			mode = "exact"
-			r_book = tolower(ref)
-
-		} else if (match(ref, "^[1-9]?[a-zA-Z ]+:[0-9]+$")) {
-			mode = "exact"
-
-			split(ref, arr, ":")
-			r_book = tolower(arr[1])
-			r_chapter = arr[2]
-
-		} else if (match(ref, "^[1-9]?[a-zA-Z ]+:[0-9]+:[0-9]+$")) {
-			mode = "exact"
-
-			split(ref, arr, ":")
-			r_book = tolower(arr[1])
-			r_chapter = arr[2]
-			r_verse = arr[3]
-
-		} else if (match(ref, "^[1-9]?[a-zA-Z ]+:[0-9]+-[0-9]+$")) {
-			mode = "range"
-
-			split(ref, arr, ":")
-			r_book = tolower(arr[1])
-
-			split(arr[2], arr, "-")
-			r_chapter_lower = arr[1]
-			r_chapter_upper = arr[2]
-
-		} else if (match(ref, "^[1-9]?[a-zA-Z ]+:[0-9]+:[0-9]+-[0-9]+$")) {
-			mode = "range"
-
-			split(ref, arr, ":")
-			r_book = tolower(arr[1])
-			r_chapter_lower = r_chapter_upper = arr[2]
-
-			split(arr[3], arr, "-")
-			r_verse_lower = arr[1]
-			r_verse_upper = arr[2]
-
-		} else if (match(ref, "^[1-9]?[a-zA-Z ]+:[0-9]+:[0-9]+-[0-9]+:[0-9]+$")) {
-			mode = "range_ext"
-
-			split(ref, arr, ":")
-			r_book = tolower(arr[1])
-			r_start_chapter = arr[2]
-			r_end_verse = arr[4]
-
-			split(arr[3], arr, "-")
-			r_start_verse = arr[1]
-			r_end_chapter = arr[2]
-
-		} else if (match(ref, "^/")) {
-			mode = "search"
-
-			r_search = substr(ref, 2)
-
-		} else if (match(ref, "^[1-9]?[a-zA-Z ]+/")) {
-			mode = "search"
-
-			i = index(ref, "/")
-			r_book = tolower(substr(ref, 1, i - 1))
-			r_search = substr(ref, i + 1)
-
-		} else if (match(ref, "^[1-9]?[a-zA-Z ]+:[0-9]+/")) {
-			mode = "search"
-
-			i = index(ref, ":")
-			r_book = tolower(substr(ref, 1, i - 1))
-
-			ref2 = substr(ref, i + 1)
-			i = index(ref2, "/")
-			r_chapter = substr(ref2, 0, i - 1)
-			r_search = substr(ref2, i + 1)
-		}
+		mode = parseref(ref, p)
+		p["book"] = tolower(p["book"])
 	}
 }
 
@@ -90,6 +17,92 @@ cmd == "list" {
 	if (!($2 in seen_books)) {
 		printf("%s (%s)\n", $1, $2)
 		seen_books[$2] = 1
+	}
+}
+
+function parseref(ref, arr) {
+	# 1. <book>
+	# 2. <book>:?<chapter>
+	# 3. <book>:?<chapter>:<verse>
+	# 4. <book>:?<chapter>-<chapter>
+	# 5. <book>:?<chapter>:<verse>-<verse>
+	# 6. <book>:?<chapter>:<verse>-<chapter>:<verse>
+	# 7. /<search>
+	# 8. <book>/search
+	# 9. <book>:?<chapter>/search
+
+	if (match(ref, "^[1-9]?[a-zA-Z ]+")) {
+		# 1, 2, 3, 4, 5, 6, 8, 9
+		arr["book"] = substr(ref, 1, RLENGTH)
+		ref = substr(ref, RLENGTH + 1)
+	} else if (match(ref, "^/")) {
+		# 7
+		arr["search"] = substr(ref, 2)
+		return "search"
+	} else {
+		return "unknown"
+	}
+
+	if (match(ref, "^:?[1-9]+[0-9]*")) {
+		# 2, 3, 4, 5, 6, 9
+		if (sub("^:", "", ref)) {
+			arr["chapter"] = int(substr(ref, 1, RLENGTH - 1))
+			ref = substr(ref, RLENGTH)
+		} else {
+			arr["chapter"] = int(substr(ref, 1, RLENGTH))
+			ref = substr(ref, RLENGTH + 1)
+		}
+	} else if (match(ref, "^/")) {
+		# 8
+		arr["search"] = substr(ref, 2)
+		return "search"
+	} else if (ref == "") {
+		# 1
+		return "exact"
+	} else {
+		return "unknown"
+	}
+
+	if (match(ref, "^:[1-9]+[0-9]*")) {
+		# 3, 5, 6
+		arr["verse"] = int(substr(ref, 2, RLENGTH - 1))
+		ref = substr(ref, RLENGTH + 1)
+	} else if (match(ref, "^-[1-9]+[0-9]*$")) {
+		# 4
+		arr["chapter_end"] = int(substr(ref, 2))
+		return "range"
+	} else if (match(ref, "^/")) {
+		# 9
+		arr["search"] = substr(ref, 2)
+		return "search"
+	} else if (ref == "") {
+		# 2
+		return "exact"
+	} else {
+		return "unknown"
+	}
+
+	if (match(ref, "^-[1-9]+[0-9]*$")) {
+		# 5
+		arr["verse_end"] = int(substr(ref, 2))
+		return "range"
+	} else if (match(ref, "-[1-9]+[0-9]*")) {
+		# 6
+		arr["chapter_end"] = int(substr(ref, 2, RLENGTH - 1))
+		ref = substr(ref, RLENGTH + 1)
+	} else if (ref == "") {
+		# 3
+		return "exact"
+	} else {
+		return "unknown"
+	}
+
+	if (match(ref, "^:[1-9]+[0-9]*$")) {
+		# 6
+		arr["verse_end"] = int(substr(ref, 2))
+		return "range_ext"
+	} else {
+		return "unknown"
 	}
 }
 
@@ -121,19 +134,19 @@ function processline() {
 	outputted_records++
 }
 
-cmd == "ref" && mode == "exact" && (tolower($1) == r_book || tolower($2) == r_book) && (r_chapter == "" || $4 == r_chapter) && (r_verse == "" || $5 == r_verse) {
+cmd == "ref" && mode == "exact" && (tolower($1) == p["book"] || tolower($2) == p["book"]) && (p["chapter"] == "" || $4 == p["chapter"]) && (p["verse"] == "" || $5 == p["verse"]) {
 	processline()
 }
 
-cmd == "ref" && mode == "range" && (tolower($1) == r_book || tolower($2) == r_book) && $4 >= r_chapter_lower && $4 <= r_chapter_upper && (r_verse_lower == "" || $5 >= r_verse_lower) && (r_verse_upper == "" || $5 <= r_verse_upper) {
+cmd == "ref" && mode == "range" && (tolower($1) == p["book"] || tolower($2) == p["book"]) && ((p["chapter_end"] == "" && $4 == p["chapter"]) || ($4 >= p["chapter"] && $4 <= p["chapter_end"])) && (p["verse"] == "" || $5 >= p["verse"]) && (p["verse_end"] == "" || $5 <= p["verse_end"]) {
 	processline()
 }
 
-cmd == "ref" && mode == "range_ext" && (tolower($1) == r_book || tolower($2) == r_book) && (($4 == r_start_chapter && $5 >= r_start_verse) || ($4 > r_start_chapter && $4 < r_end_chapter) || ($4 == r_end_chapter && $5 <= r_end_verse)) {
+cmd == "ref" && mode == "range_ext" && (tolower($1) == p["book"] || tolower($2) == p["book"]) && (($4 == p["chapter"] && $5 >= p["verse"]) || ($4 > p["chapter"] && $4 < p["chapter_end"]) || ($4 == p["chapter_end"] && $5 <= p["verse_end"])) {
 	processline()
 }
 
-cmd == "ref" && mode == "search" && (r_book == "" || tolower($1) == r_book || tolower($2) == r_book) && (r_chapter == "" || $4 == r_chapter) && match(tolower($6), tolower(r_search)) {
+cmd == "ref" && mode == "search" && (p["book"] == "" || tolower($1) == p["book"] || tolower($2) == p["book"]) && (p["chapter"] == "" || $4 == p["chapter"]) && match(tolower($6), tolower(p["search"])) {
 	processline()
 }
 
