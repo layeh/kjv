@@ -21,6 +21,7 @@ show_help() {
 	echo "usage: $(basename "$0") [flags] <references...>"
 	echo
 	echo "  -l      list books"
+	echo "  -W      no line wrap"
 	echo "  -h      show help"
 	echo
 	echo "  References types:"
@@ -60,10 +61,14 @@ while [ $# -gt 0 ]; do
 		# List all book names with their abbreviations
 		get_data kjv.tsv | awk -v cmd=list "$(get_data kjv.awk)"
 		exit
+	elif [ "$1" = "-W" ]; then
+		export KJV_NOLINEWRAP=1
+		shift
 	elif [ "$1" = "-h" ] || [ "$isFlag" -eq 1 ]; then
 		show_help
+	else
+		break
 	fi
-	break
 done
 
 if [ $# -eq 0 ]; then

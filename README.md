@@ -7,6 +7,7 @@ Read the Word of God from your terminal
     usage: ./kjv [flags] <references...>
 
       -l      list books
+      -W      no line wrap
       -h      show help
 
       References types:
