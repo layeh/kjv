@@ -142,7 +142,7 @@ cmd == "ref" && mode == "range" && (tolower($1) == p["book"] || tolower($2) == p
 	processline()
 }
 
-cmd == "ref" && mode == "range_ext" && (tolower($1) == p["book"] || tolower($2) == p["book"]) && (($4 == p["chapter"] && $5 >= p["verse"]) || ($4 > p["chapter"] && $4 < p["chapter_end"]) || ($4 == p["chapter_end"] && $5 <= p["verse_end"])) {
+cmd == "ref" && mode == "range_ext" && (tolower($1) == p["book"] || tolower($2) == p["book"]) && (($4 == p["chapter"] && $5 >= p["verse"] && p["chapter"] != p["chapter_end"]) || ($4 > p["chapter"] && $4 < p["chapter_end"]) || ($4 == p["chapter_end"] && $5 <= p["verse_end"] && p["chapter"] != p["chapter_end"]) || (p["chapter"] == p["chapter_end"] && $4 == p["chapter"] && $5 >= p["verse"] && $5 <= p["verse_end"])) {
 	processline()
 }
 
