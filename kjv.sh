@@ -16,7 +16,7 @@ if [ -z "$PAGER" ]; then
 	fi
 fi
 
-function help() {
+show_help() {
 	exec >&2
 	echo "usage: $0 [flags] <references...>"
 	echo
@@ -61,13 +61,13 @@ while [ $# -gt 0 ]; do
 		get_data kjv.tsv | awk -v cmd=list "$(get_data kjv.awk)"
 		exit
 	elif [ "$1" = "-h" ] || [ "$isFlag" -eq 1 ]; then
-		help
+		show_help
 	fi
 	break
 done
 
 if [ $# -eq 0 ]; then
-	help
+	show_help
 fi
 
 startIdx=$#
