@@ -109,7 +109,7 @@ function parseref(ref, arr) {
 function printverse(verse,    word_count, characters_printed) {
 	word_count = split(verse, words, " ")
 	for (i = 1; i <= word_count; i++) {
-		if (characters_printed + length(words[i]) > 72) {
+		if (characters_printed + length(words[i]) + (characters_printed > 0 ? 1 : 0) > 72) {
 			printf("\n\t")
 			characters_printed = 0
 		}
