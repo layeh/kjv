@@ -15,8 +15,8 @@ Read the Word of God from your terminal
               Individual book
           <Book>:<Chapter>
               Individual chapter of a book
-          <Book>:<Chapter>:<Verse>
-              Individual verse of a specific chapter of a book
+          <Book>:<Chapter>:<Verse>[,<Verse>]...
+              Individual verse(s) of a specific chapter of a book
           <Book>:<Chapter>-<Chapter>
               Range of chapters in a book
           <Book>:<Chapter>:<Verse>-<Verse>
