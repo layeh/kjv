@@ -2,7 +2,7 @@
 
 Read the Word of God from your terminal
 
-# Usage
+## Usage
 
     usage: ./kjv [flags] <references...>
 
@@ -30,6 +30,14 @@ Read the Word of God from your terminal
               All verses in a book that match a pattern
           <Book>:<Chapter>/<Search>
               All verses in a chapter of a book that match a pattern
+
+## Build
+
+kjv can be built by cloning the repository and then running make:
+
+    git clone https://github.com/bontibon/kjv.git
+    cd kjv
+    make
 
 ## License
 
