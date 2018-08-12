@@ -9,7 +9,7 @@ BEGIN {
 
 	if (cmd == "ref") {
 		mode = parseref(ref, p)
-		p["book"] = tolower(p["book"])
+		p["book"] = cleanbook(p["book"])
 	}
 }
 
@@ -106,6 +106,12 @@ function parseref(ref, arr) {
 	}
 }
 
+function cleanbook(book) {
+	book = tolower(book)
+	gsub(" +", "", book)
+	return book
+}
+
 function printverse(verse,    word_count, characters_printed) {
 	if (ENVIRON["KJV_NOLINEWRAP"] != "" && ENVIRON["KJV_NOLINEWRAP"] != "0") {
 		printf("%s\n", verse)
@@ -139,19 +145,19 @@ function processline() {
 	outputted_records++
 }
 
-cmd == "ref" && mode == "exact" && (tolower($1) == p["book"] || tolower($2) == p["book"]) && (p["chapter"] == "" || $4 == p["chapter"]) && (p["verse"] == "" || $5 == p["verse"]) {
+cmd == "ref" && mode == "exact" && (cleanbook($1) == p["book"] || cleanbook($2) == p["book"]) && (p["chapter"] == "" || $4 == p["chapter"]) && (p["verse"] == "" || $5 == p["verse"]) {
 	processline()
 }
 
-cmd == "ref" && mode == "range" && (tolower($1) == p["book"] || tolower($2) == p["book"]) && ((p["chapter_end"] == "" && $4 == p["chapter"]) || ($4 >= p["chapter"] && $4 <= p["chapter_end"])) && (p["verse"] == "" || $5 >= p["verse"]) && (p["verse_end"] == "" || $5 <= p["verse_end"]) {
+cmd == "ref" && mode == "range" && (cleanbook($1) == p["book"] || cleanbook($2) == p["book"]) && ((p["chapter_end"] == "" && $4 == p["chapter"]) || ($4 >= p["chapter"] && $4 <= p["chapter_end"])) && (p["verse"] == "" || $5 >= p["verse"]) && (p["verse_end"] == "" || $5 <= p["verse_end"]) {
 	processline()
 }
 
-cmd == "ref" && mode == "range_ext" && (tolower($1) == p["book"] || tolower($2) == p["book"]) && (($4 == p["chapter"] && $5 >= p["verse"] && p["chapter"] != p["chapter_end"]) || ($4 > p["chapter"] && $4 < p["chapter_end"]) || ($4 == p["chapter_end"] && $5 <= p["verse_end"] && p["chapter"] != p["chapter_end"]) || (p["chapter"] == p["chapter_end"] && $4 == p["chapter"] && $5 >= p["verse"] && $5 <= p["verse_end"])) {
+cmd == "ref" && mode == "range_ext" && (cleanbook($1) == p["book"] || cleanbook($2) == p["book"]) && (($4 == p["chapter"] && $5 >= p["verse"] && p["chapter"] != p["chapter_end"]) || ($4 > p["chapter"] && $4 < p["chapter_end"]) || ($4 == p["chapter_end"] && $5 <= p["verse_end"] && p["chapter"] != p["chapter_end"]) || (p["chapter"] == p["chapter_end"] && $4 == p["chapter"] && $5 >= p["verse"] && $5 <= p["verse_end"])) {
 	processline()
 }
 
-cmd == "ref" && mode == "search" && (p["book"] == "" || tolower($1) == p["book"] || tolower($2) == p["book"]) && (p["chapter"] == "" || $4 == p["chapter"]) && match(tolower($6), tolower(p["search"])) {
+cmd == "ref" && mode == "search" && (p["book"] == "" || cleanbook($1) == p["book"] || cleanbook($2) == p["book"]) && (p["chapter"] == "" || $4 == p["chapter"]) && match(tolower($6), tolower(p["search"])) {
 	processline()
 }
 
