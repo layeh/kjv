@@ -96,15 +96,15 @@ function parseref(ref, arr) {
 		return "exact"
 	} else if (match(ref, "^,[1-9]+[0-9]*")) {
 		# 3a
-		arr["verse", arr["verse"]] = 1;
-		delete arr["verse"];
+		arr["verse", arr["verse"]] = 1
+		delete arr["verse"]
 		do {
-			arr["verse", substr(ref, 2, RLENGTH - 1)] = 1;
-			ref = substr(ref, RLENGTH + 1);
-		} while (match(ref, "^,[1-9]+[0-9]*"));
+			arr["verse", substr(ref, 2, RLENGTH - 1)] = 1
+			ref = substr(ref, RLENGTH + 1)
+		} while (match(ref, "^,[1-9]+[0-9]*"))
 
 		if (ref != "") {
-			return "unknown";
+			return "unknown"
 		}
 
 		return "exact_set"
