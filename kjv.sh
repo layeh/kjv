@@ -72,7 +72,19 @@ while [ $# -gt 0 ]; do
 done
 
 if [ $# -eq 0 ]; then
-	show_help
+	if [ ! -t 0 ]; then
+		show_help
+	fi
+
+	# Interactive mode
+	while true; do
+		printf "kjv> "
+		if ! read -r ref; then
+			break
+		fi
+		get_data kjv.tsv | awk -v cmd=ref -v ref="$ref" "$(get_data kjv.awk)" | ${PAGER}
+	done
+	exit 0
 fi
 
 startIdx=$#
