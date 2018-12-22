@@ -4,13 +4,13 @@ Read the Word of God from your terminal
 
 ## Usage
 
-    usage: ./kjv [flags] <references...>
+    usage: ./kjv [flags] [reference...]
 
       -l      list books
       -W      no line wrap
       -h      show help
 
-      References types:
+      Reference types:
           <Book>
               Individual book
           <Book>:<Chapter>

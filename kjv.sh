@@ -18,13 +18,13 @@ fi
 
 show_help() {
 	exec >&2
-	echo "usage: $(basename "$0") [flags] <references...>"
+	echo "usage: $(basename "$0") [flags] [reference...]"
 	echo
 	echo "  -l      list books"
 	echo "  -W      no line wrap"
 	echo "  -h      show help"
 	echo
-	echo "  References types:"
+	echo "  Reference types:"
 	echo "      <Book>"
 	echo "          Individual book"
 	echo "      <Book>:<Chapter>"
@@ -87,11 +87,4 @@ if [ $# -eq 0 ]; then
 	exit 0
 fi
 
-startIdx=$#
-(while [ $# -gt 0 ]; do
-	if [ "${startIdx}" -ne $# ]; then
-		echo
-	fi
-	get_data kjv.tsv | awk -v cmd=ref -v ref="$1" "$(get_data kjv.awk)"
-	shift
-done ) | ${PAGER}
+get_data kjv.tsv | awk -v cmd=ref -v ref="$*" "$(get_data kjv.awk)" | ${PAGER}
