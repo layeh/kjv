@@ -71,6 +71,11 @@ while [ $# -gt 0 ]; do
 	fi
 done
 
+cols=$(tput cols 2>/dev/null)
+if [ $? -eq 0 ]; then
+	export KJV_MAX_WIDTH="$cols"
+fi
+
 if [ $# -eq 0 ]; then
 	if [ ! -t 0 ]; then
 		show_help

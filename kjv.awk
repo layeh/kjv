@@ -7,6 +7,13 @@ BEGIN {
 	#  $6 Verse
 	FS = "\t"
 
+	MAX_WIDTH = 80
+	if (ENVIRON["KJV_MAX_WIDTH"] ~ /^[0-9]+$/) {
+		if (int(ENVIRON["KJV_MAX_WIDTH"]) < MAX_WIDTH) {
+			MAX_WIDTH = int(ENVIRON["KJV_MAX_WIDTH"])
+		}
+	}
+
 	if (cmd == "ref") {
 		mode = parseref(ref, p)
 		p["book"] = cleanbook(p["book"])
@@ -151,7 +158,7 @@ function printverse(verse,    word_count, characters_printed) {
 
 	word_count = split(verse, words, " ")
 	for (i = 1; i <= word_count; i++) {
-		if (characters_printed + length(words[i]) + (characters_printed > 0 ? 1 : 0) > 72) {
+		if (characters_printed + length(words[i]) + (characters_printed > 0 ? 1 : 0) > MAX_WIDTH - 8) {
 			printf("\n\t")
 			characters_printed = 0
 		}
