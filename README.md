@@ -1,6 +1,9 @@
-# kjv [![AUR](https://img.shields.io/badge/AUR-kjv--git-blue.svg)](https://aur.archlinux.org/packages/kjv-git/)
+# kjv
 
 Read the Word of God from your terminal
+
+Forked from [https://github.com/bontibon/kjv.git](https://github.com/bontibon/kjv.git) but with the Apocrypha added.
+
 
 ## Usage
 
@@ -35,9 +38,9 @@ Read the Word of God from your terminal
 
 kjv can be built by cloning the repository and then running make:
 
-    git clone https://github.com/bontibon/kjv.git
+    git clone https://github.com/lukesmithxyz/kjv.git
     cd kjv
-    make
+    sudo make install
 
 ## License
 
