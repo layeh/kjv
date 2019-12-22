@@ -45,7 +45,7 @@ I recommend creating a folder in your ~/Downloads, called ~/Downloads/.src for a
 
 Now, clone kjva's repository and then run make:
 
-    git clone https://github.com/Matthew-Tate-Scarbrough/kjv.git ~/Downloads/.src/cmd-bibles/kjva
+    git clone https://github.com/Matthew-Tate-Scarbrough/kjva.git ~/Downloads/.src/cmd-bibles/kjva
     cd ~/Downloads/.src/cmd-bibles/kjva
     sudo make install
 
