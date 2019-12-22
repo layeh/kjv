@@ -87,7 +87,7 @@ if [ $# -eq 0 ]; then
 
 	# Interactive mode
 	while true; do
-		printf "kjva> "
+		printf "What would you like to read? "
 		if ! read -r ref; then
 			break
 		fi
