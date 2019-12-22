@@ -1,5 +1,5 @@
 #!/bin/sh
-# kjva: Read the Word of God from your terminal
+# kjva: Read the Word of God+the Apocrypha from your terminal!
 # License: Public domain
 
 SELF="$0"
