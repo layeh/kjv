@@ -1,16 +1,18 @@
-# kjv
+# kjva
 
-Read the Word of God from your terminal
+Read the Word of God from your terminal,
 
-Forked from [https://github.com/bontibon/kjv.git](https://github.com/bontibon/kjv.git) but with the Apocrypha added.
+Forked from [https://github.com/lukesmithxyz/kjv.git], which is forked from [https://github.com/bontibon/kjv.git](https://github.com/bontibon/kjv.git) but with the Apocrypha added.
 
+Smith added the apocrypha and made a better Makefile, however, I have rebranded it as "kjva," meaning kjv+apocyrpha, to avoid confusion with the original by bontibon, and have added a "-w" option, over the "-W."
 
 ## Usage
 
-    usage: ./kjv [flags] [reference...]
+    usage: ./kjva [flags] [reference...]
 
       -l      list books
-      -W      no line wrap
+      -w      no line wrap
+      -W      no line wrap (same as -w)
       -h      show help
 
       Reference types:
@@ -36,10 +38,10 @@ Forked from [https://github.com/bontibon/kjv.git](https://github.com/bontibon/kj
 
 ## Build
 
-kjv can be built by cloning the repository and then running make:
+kjva can be built by cloning the repository and then running make:
 
-    git clone https://github.com/lukesmithxyz/kjv.git
-    cd kjv
+    git clone https://github.com/Matthew-Tate-Scarbrough/kjv.git ~/Downloads/.src/cmd-bibles/kjva
+    cd ~/Downloads/.src/cmd-bibles/kjva
     sudo make install
 
 ## License
