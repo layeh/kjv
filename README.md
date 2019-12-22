@@ -1,6 +1,6 @@
 # kjva
 
-Read the Word of God from your terminal,
+Read the Word of God + the Apocrypha from your terminal!
 
 Forked from [https://github.com/lukesmithxyz/kjv.git], which is forked from [https://github.com/bontibon/kjv.git](https://github.com/bontibon/kjv.git) but with the Apocrypha added.
 
