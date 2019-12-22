@@ -38,7 +38,12 @@ Smith added the apocrypha and made a better Makefile, however, I have rebranded 
 
 ## Build
 
-kjva can be built by cloning the repository and then running make:
+I recommend creating a folder in your ~/Downloads, called ~/Downloads/.src for all source code; if you plan on using other people's forks of a particular software, like bontibon's "kjv," then make a subfolder appropriately named.
+
+    mkdir ~/Downloads/.src
+    mkdir ~/Downloads/.src/cmd-bibles
+
+Now, clone kjva's repository and then run make:
 
     git clone https://github.com/Matthew-Tate-Scarbrough/kjv.git ~/Downloads/.src/cmd-bibles/kjva
     cd ~/Downloads/.src/cmd-bibles/kjva
