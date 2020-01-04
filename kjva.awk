@@ -151,7 +151,7 @@ function bookmatches(book, bookabbr, query) {
 }
 
 function printverse(verse,    word_count, characters_printed) {
-	if (ENVIRON["KJVA_NOLINEWRAP"] != "" && ENVIRON["KJV_NOLINEWRAP"] != "0") {
+	if (ENVIRON["KJVA_NOLINEWRAP"] != "" && ENVIRON["KJVA_NOLINEWRAP"] != "0") {
 		printf("%s\n", verse)
 		return
 	}
