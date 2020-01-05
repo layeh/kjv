@@ -16,6 +16,12 @@ Current list of branches:
 
     lut - Martin Luther's 1545 Bible
 
+## Recommendation
+
+I recommend when using multiple language texts in your terminal that you use a monospace font that support multiple languages; the FSF's FreeMono has almost 4,200 unique glyphs and their FreeSerif--almost 10,600 (though it's not mono-space).
+
+You may also want to look fonts in a specific desired language.
+
 ## Usage
 
     usage: ./kjva [flags] [reference...]
