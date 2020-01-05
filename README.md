@@ -6,6 +6,16 @@ Forked from [https://github.com/LukeSmithxyz/kjv.git](https://github.com/LukeSmi
 
 Smith added the apocrypha and made a better Makefile, however, I have rebranded it as "kjva," meaning kjv+apocyrpha, to avoid confusion with the original by bontibon, and have added a "-w" option, over the "-W."
 
+## Branches
+
+I am adding branches as I make them, to download these, use:
+
+    git clone https://github.comf/Matthew-Tate-Scarbrough/kjva.git --branch <branch name>
+
+Current list of branches:
+
+    lut - Martin Luther's 1545 Bible
+
 ## Usage
 
     usage: ./kjva [flags] [reference...]
