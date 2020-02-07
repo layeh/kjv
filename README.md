@@ -1,3 +1,5 @@
+![KJVA - The Psalm Update!](https://raw.githubusercontent.com/Matthew-Tate-Scarbrough/kjva/master/psalm-update.png)
+
 kjva
 ====
 
