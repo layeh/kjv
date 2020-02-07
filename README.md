@@ -84,7 +84,7 @@ For the Luther 1545 branch, do:
 For the KJV-pure branch, do:
 
     git clone https://github.com/Matthew-Tate-Scarbrough/kjva.git --branch kjv ~/Downloads/.src/cmd-bibles/kjv-mts
-    cd ~/Downloads/.src/cmd-bibles/lut
+    cd ~/Downloads/.src/cmd-bibles/kjv-mts
     sudo make install
 
 ## License
