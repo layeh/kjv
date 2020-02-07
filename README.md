@@ -1,19 +1,15 @@
 ![KJVA - The Psalm Update!](https://raw.githubusercontent.com/Matthew-Tate-Scarbrough/kjva/master/psalm-update.png)
 
-kjva
-====
+kjv
+===
 
-Read the Word of God + the Apocrypha from your terminal!
+Read the Word of God from your terminal!
 
 Forked from [https://github.com/LukeSmithxyz/kjv.git](https://github.com/LukeSmithxyz/kjv.git), which is forked from [https://github.com/bontibon/kjv.git](https://github.com/bontibon/kjv.git) but with the Apocrypha added.
 
-Smith added the apocrypha and made a better Makefile, however, I have rebranded it as "kjva," meaning kjv+apocyrpha, to avoid confusion with the original by bontibon, and have added a "-w" option, over the "-W."
+Smith added the apocrypha and made a better Makefile, however, I have removed it in this branch, and have added a "-w" option, over the "-W."
+Recently, I have also added the Psalm headers and Alephbet to the Psalms.
 
-The master (kjva) now has all of the forewords to the Psalms that had them--when the KJV translators were translating Bible, they were allowed to modify the versification *if* absolutely necessary;
-they exercised this right in the Psalms by making the headers for each Psalm not a verse--many people often mistake these as not being scripture, but are technically scripture.
-They do nothing more than explain both or either of who wrote the psalm or what its purpose is.
-
-I also added the Hebrew Alephbet to the Psalm 119, and added a few extra verses (0-0u) that explain how to pronounce the names of the letters in Tiberian Hebrew pronunciation.
 
 Branches
 --------
@@ -25,6 +21,7 @@ I am adding branches as I make them, to download these, use:
 Current list of branches:
 
     lut - Martin Luther's 1545 Bible
+    kjv - Intended to be an improved version of Bontibon's KJV pure
 
 Recommendation
 --------------
@@ -36,7 +33,7 @@ You may also want to look fonts in a specific desired language.
 Usage
 -----
 
-    usage: ./kjva [flags] [reference...]
+    usage: ./kjv [flags] [reference...]
 
       -l      list books
       -w      no line wrap
@@ -81,6 +78,12 @@ Now, clone kjva's repository and then run make:
 For the Luther 1545 branch, do:
 
     git clone https://github.com/Matthew-Tate-Scarbrough/kjva.git --branch lut ~/Downloads/.src/cmd-bibles/lut
+    cd ~/Downloads/.src/cmd-bibles/lut
+    sudo make install
+
+For the KJV-pure branch, do:
+
+    git clone https://github.com/Matthew-Tate-Scarbrough/kjva.git --branch kjv ~/Downloads/.src/cmd-bibles/kjv-mts
     cd ~/Downloads/.src/cmd-bibles/lut
     sudo make install
 
