@@ -25,6 +25,7 @@ I am adding branches as I make them, to download these, use:
 Current list of branches:
 
     lut - Martin Luther's 1545 Bible
+    kjv - KJV-pure, without the questionable Apocrypha
 
 Recommendation
 --------------
@@ -82,6 +83,12 @@ For the Luther 1545 branch, do:
 
     git clone https://github.com/Matthew-Tate-Scarbrough/kjva.git --branch lut ~/Downloads/.src/cmd-bibles/lut
     cd ~/Downloads/.src/cmd-bibles/lut
+    sudo make install
+
+For the KJV-Pure branch, do:
+
+    git clone https://github.com/Matthew-Tate-Scarbrough/kjva.git --branch kjv ~/Downloads/.src/cmd-bibles/kjv-mts
+    cd ~/Downloads/.src/cmd-bibles/kjv-mts
     sudo make install
 
 ## License
