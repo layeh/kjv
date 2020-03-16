@@ -10,7 +10,7 @@ get_darby = function(verse_index) {
 # Function to get darby version by diatheke
     # Input is the verse_index: 1 John 3:1
     # Output is the Darby version to be included
-    command = paste0("diatheke -b Darby -k ", verse_index)
+    command = paste0("diatheke -b Darby -f plain -k ", verse_index)
     verse = system(command, intern=TRUE)
     return_verse = substring(verse[1], nchar(verse_index) + 3)
     # print(paste("-- converting:", verse_index)) ## just for debugging, may slow down converting process
@@ -20,7 +20,6 @@ get_darby = function(verse_index) {
 d$index = paste0(d$V1, " ", d$V4, ":", d$V5)
 # d = d[1:10, ]
 d$verse =sapply(d$index, get_darby)
-
 
 
 # Save the converted version

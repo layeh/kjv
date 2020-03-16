@@ -37,7 +37,14 @@ kjv can be built by cloning the repository and then running make:
 
     git clone https://github.com/bontibon/kjv.git
     cd kjv
-    make
+
+    To make different versions: 
+      make kjv
+      make darby
+      make chiuns
+
+    - To make the naming easier, can rename these binaries, such as:  mv chiuns cus 
+      These binaries can be put at a place on the path for usage (such as ~/.local/bin/ etc. )
 
 ## License
 
