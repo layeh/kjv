@@ -87,7 +87,7 @@ if [ $# -eq 0 ]; then
 
 	# Interactive mode
 	while true; do
-		printf "What would you like to read? "
+		printf "[33mWhat would you like to read?[0m "
 		if ! read -r ref; then
 			break
 		fi
