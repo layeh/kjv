@@ -1,4 +1,5 @@
-![KJVA - The Psalm Update!](https://raw.githubusercontent.com/Matthew-Tate-Scarbrough/kjva/master/psalm-update.png)
+![KJVA - The Psalm Update!](https://raw.githubusercontent.com/Matthew-Tate-Scarbrough/kjva/master/psalm_update.png)
+
 
 kjva
 ====
@@ -15,6 +16,9 @@ They do nothing more than explain both or either of who wrote the psalm or what 
 
 I also added the Hebrew Alephbet to the Psalm 119, and added a few extra verses (0-0u) that explain how to pronounce the names of the letters in Tiberian Hebrew pronunciation.
 
+![KJVA - Colours](https://raw.githubusercontent.com/Matthew-Tate-Scarbrough/kjva/master/colours_update.png)
+
+
 Branches
 --------
 
@@ -27,12 +31,14 @@ Current list of branches:
     lut - Martin Luther's 1545 Bible
     kjv - KJV-pure, without the questionable Apocrypha
 
+
 Recommendation
 --------------
 
 I recommend when using multiple language texts in your terminal that you use a monospace font that support multiple languages; the FSF's FreeMono has almost 4,200 unique glyphs and their FreeSerif--almost 10,600 (though it's not mono-space).
 
 You may also want to look fonts in a specific desired language.
+
 
 Usage
 -----
@@ -64,6 +70,7 @@ Usage
               All verses in a book that match a pattern
           <Book>:<Chapter>/<Search>
               All verses in a chapter of a book that match a pattern
+
 
 Build
 -----

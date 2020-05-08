@@ -18,33 +18,33 @@ fi
 
 show_help() {
 	exec >&2
-	echo "usage: $(basename "$0") [flags] [reference...]"
+	echo    "usage: $(basename "$0") [flags] [reference...]"
+	echo   
+	echo -e "  [33m-l[0m      list books"
+	echo -e "  [32m-w[0m      no line wrap"
+	echo -e "  [32m-W[0m      no line wrap (same as [32m-w[0m)"
+	echo -e "  [36m-h[0m      show help"
+	echo   
+	echo    "  Reference types:"
+	echo -e "      [31m<Book>[0m"
+	echo    "          Individual book"
+	echo -e "      [31m<Book>[0m:[32m<Chapter>[0m"
+	echo    "          Individual chapter of a book"
+	echo -e "      [31m<Book>[0m:[32m<Chapter>[0m:[33m<Verse>[0m[,[33m<Verse>[0m]..."
+	echo    "          Individual verse(s) of a specific chapter of a book"
+	echo -e "      [31m<Book>[0m:[32m<Chapter>[0m-[32m<Chapter>[0m"
+	echo    "          Range of chapters in a book"
+	echo -e "      [31m<Book>[0m:[32m<Chapter>[0m:[33m<Verse>[0m-[33m<Verse>[0m"
+	echo    "          Range of verses in a book chapter"
+	echo -e "      [31m<Book>[0m:[32m<Chapter>[0m:[33m<Verse>[0m-[32m<Chapter>[0m:[33m<Verse>[0m"
+	echo    "          Range of chapters and verses in a book"
 	echo
-	echo "  -l      list books"
-	echo "  -w      no line wrap"
-	echo "  -W      no line wrap (same as -W)"
-	echo "  -h      show help"
-	echo
-	echo "  Reference types:"
-	echo "      <Book>"
-	echo "          Individual book"
-	echo "      <Book>:<Chapter>"
-	echo "          Individual chapter of a book"
-	echo "      <Book>:<Chapter>:<Verse>[,<Verse>]..."
-	echo "          Individual verse(s) of a specific chapter of a book"
-	echo "      <Book>:<Chapter>-<Chapter>"
-	echo "          Range of chapters in a book"
-	echo "      <Book>:<Chapter>:<Verse>-<Verse>"
-	echo "          Range of verses in a book chapter"
-	echo "      <Book>:<Chapter>:<Verse>-<Chapter>:<Verse>"
-	echo "          Range of chapters and verses in a book"
-	echo
-	echo "      /<Search>"
-	echo "          All verses that match a pattern"
-	echo "      <Book>/<Search>"
-	echo "          All verses in a book that match a pattern"
-	echo "      <Book>:<Chapter>/<Search>"
-	echo "          All verses in a chapter of a book that match a pattern"
+	echo    "      /<Search>"
+	echo    "          All verses that match a pattern"
+	echo -e "      [31m<Book>[0m/<Search>"
+	echo    "          All verses in a book that match a pattern"
+	echo -e "      [31m<Book>[0m:[32m<Chapter>[0m/<Search>"
+	echo    "          All verses in a chapter of a book that match a pattern"
 	exit 2
 }
 
