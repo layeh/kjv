@@ -6,12 +6,12 @@ kjva
 
 Read the Word of God + the Apocrypha from your terminal!
 
-Forked from [https://github.com/LukeSmithxyz/kjv.git](https://github.com/LukeSmithxyz/kjv.git), which is forked from [https://github.com/bontibon/kjv.git](https://github.com/bontibon/kjv.git) but with the Apocrypha added.
-
 **NOTE:** As of May 8, 2020, the "Colour Update" has been released.
 Because of this, if you read certain parts of the Bible using `less`, they *may* appear incorrectly formatted.
 If you do not have your `$PAGER` environmental variable manually set, then there should be **NO** issue whatsoëver.
-But, if you do, you may need to either add it to a dot-file that is executed at login and also run `export PAGER="less -R".
+But, if you do, you may need to either add it to a dot-file that is executed at login and/or also run `export PAGER="less -R".
+
+Forked from [https://github.com/LukeSmithxyz/kjv.git](https://github.com/LukeSmithxyz/kjv.git), which is forked from [https://github.com/bontibon/kjv.git](https://github.com/bontibon/kjv.git) but with the Apocrypha added.
 
 Smith added the apocrypha and made a better Makefile, however, I have rebranded it as "kjva," meaning kjv+apocyrpha, to avoid confusion with the original by bontibon, and have added a "-w" option, over the "-W."
 
