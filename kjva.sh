@@ -10,7 +10,7 @@ get_data() {
 
 if [ -z "$PAGER" ]; then
 	if command -v less >/dev/null; then
-		PAGER="less"
+		PAGER="less -R"
 	else
 		PAGER="cat"
 	fi

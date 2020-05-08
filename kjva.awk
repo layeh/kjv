@@ -174,11 +174,12 @@ function printverse(verse,    word_count, characters_printed) {
 
 function processline() {
 	if (last_book_printed != $2) {
-		print $1
+		#print $1
+		printf("[1;4m%s[0m\n", $1)
 		last_book_printed = $2
 	}
 
-	printf("%d:%d\t", $4, $5)
+	printf("[32m%d[0m:[33m%s[0m\t", $4, $5)
 	printverse($6)
 	outputted_records++
 }
