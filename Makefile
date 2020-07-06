@@ -15,10 +15,13 @@ clean:
 
 install: kjva
 	mkdir -p $(DESTDIR)$(PREFIX)/bin
-	cp -f kjva $(DESTDIR)$(PREFIX)/bin
+	cp -f kjva $(DESTDIR)$(PREFIX)/bin/
+	cp -f kjv2latex $(DESTDIR)$(PREFIX)/bin/
 	chmod 755 $(DESTDIR)$(PREFIX)/bin/kjva
+	chmod 755 $(DESTDIR)$(PREFIX)/bin/kjv2latex
 
 uninstall:
 	rm -f $(DESTDIR)$(PREFIX)/bin/kjva
+	rm -f $(DESTDIR)$(PREFIX)/bin/kjv2latex
 
 .PHONY: test clean install uninstall

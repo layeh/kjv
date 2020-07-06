@@ -1,0 +1,125 @@
+#!/bin/sh
+
+# DEPENDENCIES:
+# GNU Sed; github.com/Matthew-Tate-Scarbrough/kjva
+#
+# TODO: add help options
+
+# ===VARIABLES===
+# - - - - - - - - - - - - - - - -
+
+	KJV2LATEX_AUTHOR="Matþew T. Scarbrough"
+	KJV2LATEX_AUTH_EMAIL="matthewtatescarbrough@tutanota.com"
+	KJV2LATEX_VERSION="2.0"
+	KJV2LATEX_REVISION_DATE="2020 July 5"
+
+
+# ===HELPER FUNCTION===
+# - - - - - - - - - - - - - - - -
+
+	get_help() {
+		printf "[1;4mkjv2latex[0m
+Uses Bontibon's KJV or Matthew Scarbrough's KJVA and puts it into a LaTeX base-
+format, using superscript verse numbers. It is made for use with the \\subfiles
+package. Specifically, the intend is to have a directory structure like this:
+
+    /project/main.tex
+    /project/usr/
+    /project/usr/share/
+    /project/usr/share/books
+    /project/usr/share/books/{Genesis-Revelation}
+    /project/usr/share/books/Genesis/book.tex
+    /project/usr/share/books/Genesis/{ch1.tex-ch50.tex}
+
+[1;4mSynopsis:[0m
+
+    kjv2latex [option]
+    kjv2latex [option] <book>
+    kjv2latex [option] <book>-<book>
+    kjv2latex [option] \"<book> <chapter>\"
+    kjv2latex [option] \"<book> <chapter>-<chapter>\"
+    kjv2latex [option] \"<book> <chapter>:<verse>\"
+    kjv2latex [option] \"<book> <chapter>:<verse>-<verse>\"
+
+[1;4mUsage:[0m
+
+    [1mkjv2latex -h[0m|[1m--help[0m           -    (prints this menu)
+
+    [1mkjv2latex -n[0m|[1m--no-preamble[0m    -    Prints just the verses, ready for
+                                          use in a pre-defined template
+				          or file
+
+    [1mkjv2latex -p[0m|[1m--preamble[0m       -    Prints a basic document wrapper,
+                                          meant for use with \\subfiles
+				          in LaTeX
+
+    [1mkjv2latex -v[0m|[1m--version[0m        -    Displays version information
+
+
+$KJV2LATEX_AUTHOR <$KJV2LATEX_AUTH_EMAIL>
+"
+	}
+
+	get_ver() {
+		printf "$KJV2LATEX_AUTHOR - $KJV2LATEX_AUTH_EMAIL\nVer.: $KJV2LATEX_VERSION; (Rev.: $KJV2LATEX_REVISION_DATE)\n"
+	}
+
+
+# ===FUNCTIONS===
+# - - - - - - - - - - - - - - - -
+
+	sed1() {
+		sed '
+			1d
+			:a;N;$!ba;s/\n/&%\n/g
+			s/\[32m//g
+			s/\[33m//g
+			s/\[0m//g
+			s/\b[0-9]:\b/$^{/g
+			s/\b[0-9][0-9]:\b/$^{/g
+			s/$^{\b[0-9]\b/&}$/g
+			s/$^{\b[0-9][0-9]\b/&}$/g
+			s/\t//g
+			s/$^{1}/\\section*{Chapter }\n\n&/g
+		'
+	}
+
+	sed2() {
+		sed '
+			1d
+			:a;N;$!ba;s/\n/&%\n/g
+			s/\[32m//g
+			s/\[33m//g
+			s/\[0m//g
+			s/\b[0-9]:\b/$^{/g
+			s/\b[0-9][0-9]:\b/$^{/g
+			s/$^{\b[0-9]\b/&}$/g
+			s/$^{\b[0-9][0-9]\b/&}$/g
+			s/\t//g
+			s/$^{1}/\t\\section*{Chapter }\n\n&/g
+			s/$^{1}\$/\t\t\\noindent\n&/g
+			s/\t\\section/\\documentclass[book.tex]{subfiles}\n\n\\begin{document}\n\n&/g
+			s/$^{/\t\t&/g
+			s/%/\t\t&/g
+		'
+
+		awk '
+			NR>2
+			1; END {print "\n\\end{document}"}
+		'
+	}
+
+
+# ===CASE===
+# - - - - - - - - - - - - - - - -
+
+	case "$1" in
+		-h)		get_help ;;
+		--help)		get_help ;;
+		-n)		kjva -W "$2" | sed1 ;;
+		--no-preamble)	kjva -W "$2" | sed1 ;;
+		-p)		kjva -W "$2" | sed2 ;;
+		--preamble)	kjva -W "$2" | sed2 ;;
+		-v)		get_ver ;;
+		--version)	get_ver ;;
+	esac

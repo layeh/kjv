@@ -23,6 +23,8 @@ I also added the Hebrew Alephbet to the Psalm 119, and added a few extra verses 
 
 ![KJVA - Colours](https://raw.githubusercontent.com/Matthew-Tate-Scarbrough/kjva/master/colours_update.png)
 
+Now I am including `kjv2latex`, which is a command-line utility that takes the output of this program and puts it into LaTeX-friendly formats.
+
 
 Branches
 --------
