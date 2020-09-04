@@ -4,7 +4,7 @@ kjv: kjv.sh kjv.awk kjv.tsv
 	echo 'exit 0' >> $@
 
 	echo '#EOF' >> $@
-	tar cz kjv.awk kjv.tsv >> $@
+	tar czf - kjv.awk kjv.tsv >> $@
 
 	chmod +x $@
 
