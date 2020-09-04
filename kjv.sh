@@ -5,7 +5,7 @@
 SELF="$0"
 
 get_data() {
-	sed '1,/^#EOF$/d' < "$SELF" | tar xz -O "$1"
+	sed '1,/^#EOF$/d' < "$SELF" | tar xzf - -O "$1"
 }
 
 if [ -z "$PAGER" ]; then
