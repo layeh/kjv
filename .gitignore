@@ -1,1 +1,3 @@
 /kjv
+*.o
+/data/data.c

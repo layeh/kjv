@@ -1,14 +1,15 @@
-kjv: kjv.sh kjv.awk kjv.tsv
-	cat kjv.sh > $@
+OBJS = src/kjv.o \
+       src/intset.o \
+       data/data.o
+CFLAGS += -Wall -Iinclude/
+LDFLAGS += -lreadline
 
-	echo 'exit 0' >> $@
+kjv: $(OBJS)
+	$(CC) -o $@ $(CFLAGS) $(LDFLAGS) $^
 
-	echo '#EOF' >> $@
-	tar czf - kjv.awk kjv.tsv >> $@
+data/data.c: data/kjv.tsv data/generate.awk include/data.h
+	awk -f data/generate.awk $< > $@
 
-	chmod +x $@
-
-test: kjv.sh
-	shellcheck -s sh kjv.sh
-
-.PHONY: test
+.PHONY: clean
+clean:
+	rm -rf $(OBJS) kjv
