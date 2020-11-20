@@ -35,6 +35,7 @@ typedef struct kjv_ref {
     unsigned int verse;
     unsigned int verse_end;
     intset *verse_set;
+    char *search_str;
     regex_t search;
 } kjv_ref;
 
@@ -48,6 +49,7 @@ static void
 kjv_freeref(kjv_ref *ref)
 {
     if (ref) {
+        free(ref->search_str);
         regfree(&ref->search);
         free(ref);
     }
@@ -75,6 +77,8 @@ kjv_parseref(kjv_ref *ref, const char *ref_str)
     ref->verse_end = 0;
     intset_free(ref->verse_set);
     ref->verse_set = NULL;
+    free(ref->search_str);
+    ref->search_str = NULL;
     regfree(&ref->search);
 
     int n = 0;
@@ -178,6 +182,7 @@ search:
     if (regcomp(&ref->search, &ref_str[1], REG_EXTENDED|REG_ICASE|REG_NOSUB) != 0) {
         return 2;
     }
+    ref->search_str = strdup(&ref_str[1]);
     return 0;
 }
 
@@ -292,7 +297,7 @@ kjv_output(const kjv_ref *ref, FILE *f, bool no_linewrap, int maximum_width)
             char *word = strtok(verse_text, " ");
             while (word != NULL) {
                 size_t word_length = strlen(word);
-                if (!no_linewrap && characters_printed + word_length + (characters_printed > 0 ? 1 : 0) > maximum_width - 8) {
+                if (!no_linewrap && characters_printed + word_length + (characters_printed > 0 ? 1 : 0) > maximum_width - 8 - 2) {
                     fprintf(f, "\n\t");
                     characters_printed = 0;
                 }
@@ -323,7 +328,19 @@ kjv_render(const kjv_ref *ref, bool no_linewrap, int maximum_width)
     if (pid == 0) {
         close(fds[1]);
         dup2(fds[0], STDIN_FILENO);
-        char *args[] = { "less", "-R", "-f", "-", NULL };
+        char *args[9];
+        int arg = 0;
+        args[arg++] = "less";
+        args[arg++] = "-J";
+        args[arg++] = "-I";
+        if (ref->search_str != NULL) {
+            args[arg++] = "-p";
+            args[arg++] = ref->search_str;
+        }
+        args[arg++] = "-R";
+        args[arg++] = "-f";
+        args[arg++] = "-";
+        args[arg++] = NULL;
         execvp("less", args);
         printf("unable not exec less\n");
         _exit(0);
