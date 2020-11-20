@@ -286,29 +286,25 @@ kjv_output(const kjv_ref *ref, FILE *f, bool no_linewrap, int maximum_width)
                 last_book_printed = verse->book;
             }
             fprintf(f, ESC_BOLD "%d:%d" ESC_RESET "\t", verse->chapter, verse->verse);
-            if (no_linewrap) {
-                fprintf(f, "%s\n", verse->text);
-            } else {
-                char verse_text[1024];
-                strcpy(verse_text, verse->text);
-                size_t characters_printed = 0;
-                char *word = strtok(verse_text, " ");
-                while (word != NULL) {
-                    size_t word_length = strlen(word);
-                    if (characters_printed + word_length + (characters_printed > 0 ? 1 : 0) > maximum_width - 8) {
-                        fprintf(f, "\n\t");
-                        characters_printed = 0;
-                    }
-                    if (characters_printed > 0) {
-                        fprintf(f, " ");
-                        characters_printed++;
-                    }
-                    fprintf(f, "%s", word);
-                    characters_printed += word_length;
-                    word = strtok(NULL, " ");
+            char verse_text[1024];
+            strcpy(verse_text, verse->text);
+            size_t characters_printed = 0;
+            char *word = strtok(verse_text, " ");
+            while (word != NULL) {
+                size_t word_length = strlen(word);
+                if (!no_linewrap && characters_printed + word_length + (characters_printed > 0 ? 1 : 0) > maximum_width - 8) {
+                    fprintf(f, "\n\t");
+                    characters_printed = 0;
                 }
-                fprintf(f, "\n");
+                if (characters_printed > 0) {
+                    fprintf(f, " ");
+                    characters_printed++;
+                }
+                fprintf(f, "%s", word);
+                characters_printed += word_length;
+                word = strtok(NULL, " ");
             }
+            fprintf(f, "\n");
             printed = true;
         }
     }
