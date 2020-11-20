@@ -269,6 +269,10 @@ kjv_should_output(const kjv_ref *ref, const kjv_verse *verse)
     }
 }
 
+#define ESC_BOLD "\033[1m"
+#define ESC_UNDERLINE "\033[4m"
+#define ESC_RESET "\033[m"
+
 static bool
 kjv_output(const kjv_ref *ref, FILE *f, bool no_linewrap, int maximum_width)
 {
@@ -278,10 +282,10 @@ kjv_output(const kjv_ref *ref, FILE *f, bool no_linewrap, int maximum_width)
         kjv_verse *verse = &kjv_verses[i];
         if (kjv_should_output(ref, verse)) {
             if (verse->book != last_book_printed) {
-                fprintf(f, "%s\n", verse->book_name);
+                fprintf(f, ESC_UNDERLINE "%s" ESC_RESET "\n", verse->book_name);
                 last_book_printed = verse->book;
             }
-            fprintf(f, "%d:%d\t", verse->chapter, verse->verse);
+            fprintf(f, ESC_BOLD "%d:%d" ESC_RESET "\t", verse->chapter, verse->verse);
             if (no_linewrap) {
                 fprintf(f, "%s\n", verse->text);
             } else {
@@ -323,7 +327,7 @@ kjv_render(const kjv_ref *ref, bool no_linewrap, int maximum_width)
     if (pid == 0) {
         close(fds[1]);
         dup2(fds[0], STDIN_FILENO);
-        char *args[] = { "less", "-f", "-", NULL };
+        char *args[] = { "less", "-R", "-f", "-", NULL };
         execvp("less", args);
         printf("unable not exec less\n");
         _exit(0);
