@@ -21,6 +21,11 @@ License: Public domain
 #include "data.h"
 #include "intset.h"
 
+typedef struct {
+    bool linewrap;
+    int maximum_line_length;
+} kjv_config;
+
 #define KJV_REF_SEARCH 1
 #define KJV_REF_EXACT 2
 #define KJV_REF_EXACT_SET 3
@@ -279,7 +284,7 @@ kjv_should_output(const kjv_ref *ref, const kjv_verse *verse)
 #define ESC_RESET "\033[m"
 
 static bool
-kjv_output(const kjv_ref *ref, FILE *f, bool no_linewrap, int maximum_width)
+kjv_output(const kjv_ref *ref, FILE *f, const kjv_config *config)
 {
     bool printed = false;
     int last_book_printed = 0;
@@ -297,7 +302,7 @@ kjv_output(const kjv_ref *ref, FILE *f, bool no_linewrap, int maximum_width)
             char *word = strtok(verse_text, " ");
             while (word != NULL) {
                 size_t word_length = strlen(word);
-                if (!no_linewrap && characters_printed + word_length + (characters_printed > 0 ? 1 : 0) > maximum_width - 8 - 2) {
+                if (config->linewrap && characters_printed + word_length + (characters_printed > 0 ? 1 : 0) > config->maximum_line_length - 8 - 2) {
                     fprintf(f, "\n\t");
                     characters_printed = 0;
                 }
@@ -317,7 +322,7 @@ kjv_output(const kjv_ref *ref, FILE *f, bool no_linewrap, int maximum_width)
 }
 
 static int
-kjv_render(const kjv_ref *ref, bool no_linewrap, int maximum_width)
+kjv_render(const kjv_ref *ref, const kjv_config *config)
 {
     int fds[2];
     if (pipe(fds) == -1) {
@@ -350,7 +355,7 @@ kjv_render(const kjv_ref *ref, bool no_linewrap, int maximum_width)
     }
     close(fds[0]);
     FILE *output = fdopen(fds[1], "w");
-    bool printed = kjv_output(ref, output, no_linewrap, maximum_width);
+    bool printed = kjv_output(ref, output, config);
     if (!printed) {
         kill(pid, SIGTERM);
     }
@@ -393,8 +398,12 @@ usage = "usage: kjv [flags] [reference...]\n"
 int
 main(int argc, char *argv[])
 {
+    kjv_config config = {
+        .linewrap = true,
+        .maximum_line_length = 80,
+    };
+
     bool list_books = false;
-    bool no_linewrap = false;
 
     int opt;
     while ((opt = getopt(argc, argv, "lWh")) != -1) {
@@ -403,7 +412,7 @@ main(int argc, char *argv[])
             list_books = true;
             break;
         case 'W':
-            no_linewrap = true;
+            config.linewrap = false;
             break;
         case 'h':
             printf("%s", usage);
@@ -426,11 +435,10 @@ main(int argc, char *argv[])
         return 0;
     }
 
-    int maximum_width = 80;
     struct winsize ttysize;
     memset(&ttysize, 0, sizeof(struct winsize));
     if (ioctl(STDOUT_FILENO, TIOCGWINSZ, &ttysize) == 0 && ttysize.ws_col > 0) {
-        maximum_width = ttysize.ws_col;
+        config.maximum_line_length = ttysize.ws_col;
     }
 
     signal(SIGPIPE, SIG_IGN);
@@ -445,7 +453,7 @@ main(int argc, char *argv[])
             int success = kjv_parseref(ref, input);
             free(input);
             if (success == 0) {
-                kjv_render(ref, no_linewrap, maximum_width);
+                kjv_render(ref, &config);
             }
             kjv_freeref(ref);
         }
@@ -455,7 +463,7 @@ main(int argc, char *argv[])
         int success = kjv_parseref(ref, ref_str);
         free(ref_str);
         if (success == 0) {
-            kjv_render(ref, no_linewrap, maximum_width);
+            kjv_render(ref, &config);
         }
         kjv_freeref(ref);
     }
