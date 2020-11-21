@@ -418,7 +418,7 @@ main(int argc, char *argv[])
             printf("%s", usage);
             return 0;
         case '?':
-            printf("%s", usage);
+            fprintf(stderr, "%s", usage);
             return 1;
         }
     }
