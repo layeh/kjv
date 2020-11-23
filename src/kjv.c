@@ -424,9 +424,8 @@ main(int argc, char *argv[])
     }
 
     if (list_books) {
-        int i;
         char *last_book_printed = NULL;
-        for (i = 0; i < kjv_verses_length; i++) {
+        for (int i = 0; i < kjv_verses_length; i++) {
             if (last_book_printed == NULL || strcmp(kjv_verses[i].book_name, last_book_printed) != 0) {
                 printf("%s (%s)\n", kjv_verses[i].book_name, kjv_verses[i].book_abbr);
                 last_book_printed = kjv_verses[i].book_name;
@@ -436,7 +435,6 @@ main(int argc, char *argv[])
     }
 
     struct winsize ttysize;
-    memset(&ttysize, 0, sizeof(struct winsize));
     if (ioctl(STDOUT_FILENO, TIOCGWINSZ, &ttysize) == 0 && ttysize.ws_col > 0) {
         config.maximum_line_length = ttysize.ws_col;
     }
