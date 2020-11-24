@@ -580,11 +580,13 @@ main(int argc, char *argv[])
     signal(SIGPIPE, SIG_IGN);
 
     if (argc == optind) {
+        using_history();
         while (true) {
             char *input = readline("kjv> ");
             if (input == NULL) {
                 break;
             }
+            add_history(input);
             kjv_ref *ref = kjv_newref();
             int success = kjv_parseref(ref, input);
             free(input);
