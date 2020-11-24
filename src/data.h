@@ -11,4 +11,4 @@ typedef struct {
 
 extern kjv_verse kjv_verses[];
 
-extern size_t kjv_verses_length;
+extern int kjv_verses_length;

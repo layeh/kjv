@@ -20,5 +20,5 @@ BEGIN {
 END {
     print "};"
     print ""
-    printf("size_t kjv_verses_length = %d;\n", NR)
+    printf("int kjv_verses_length = %d;\n", NR)
 }
