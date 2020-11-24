@@ -385,11 +385,8 @@ kjv_next_verse(const kjv_ref *ref, const kjv_config *config, kjv_next_data *next
 #define ESC_RESET "\033[m"
 
 static void
-kjv_output_verse(const kjv_verse *verse, FILE *f, const kjv_config *config, const kjv_verse *last_printed)
+kjv_output_verse(const kjv_verse *verse, FILE *f, const kjv_config *config)
 {
-    if (last_printed == NULL || verse->book != last_printed->book) {
-        fprintf(f, ESC_UNDERLINE "%s" ESC_RESET "\n", verse->book_name);
-    }
     fprintf(f, ESC_BOLD "%d:%d" ESC_RESET "\t", verse->chapter, verse->verse);
     char verse_text[1024];
     strcpy(verse_text, verse->text);
@@ -427,7 +424,10 @@ kjv_output(const kjv_ref *ref, FILE *f, const kjv_config *config)
     kjv_verse *last_printed = NULL;
     for (int verse_id; (verse_id = kjv_next_verse(ref, config, &next)) != -1; ) {
         kjv_verse *verse = &kjv_verses[verse_id];
-        kjv_output_verse(verse, f, config, last_printed);
+        if (last_printed == NULL || verse->book != last_printed->book) {
+            fprintf(f, ESC_UNDERLINE "%s" ESC_RESET "\n", verse->book_name);
+        }
+        kjv_output_verse(verse, f, config);
         last_printed = verse;
     }
     return last_printed != NULL;
