@@ -424,7 +424,10 @@ kjv_output(const kjv_ref *ref, FILE *f, const kjv_config *config)
     for (int verse_id; (verse_id = kjv_next_verse(ref, config, &next)) != -1; ) {
         kjv_verse *verse = &kjv_verses[verse_id];
         if (last_printed == NULL || verse->book != last_printed->book) {
-            fprintf(f, ESC_UNDERLINE "%s" ESC_RESET "\n", verse->book_name);
+            if (last_printed != NULL) {
+                fprintf(f, "\n");
+            }
+            fprintf(f, ESC_UNDERLINE "%s" ESC_RESET "\n\n", verse->book_name);
         }
         kjv_output_verse(verse, f, config);
         last_printed = verse;
