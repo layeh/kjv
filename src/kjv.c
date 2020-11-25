@@ -23,7 +23,6 @@ License: Public domain
 #include "intset.h"
 
 typedef struct {
-    bool linewrap;
     int maximum_line_length;
 
     int context_before;
@@ -394,7 +393,7 @@ kjv_output_verse(const kjv_verse *verse, FILE *f, const kjv_config *config)
     char *word = strtok(verse_text, " ");
     while (word != NULL) {
         size_t word_length = strlen(word);
-        if (config->linewrap && characters_printed + word_length + (characters_printed > 0 ? 1 : 0) > config->maximum_line_length - 8 - 2) {
+        if (characters_printed + word_length + (characters_printed > 0 ? 1 : 0) > config->maximum_line_length - 8 - 2) {
             fprintf(f, "\n\t");
             characters_printed = 0;
         }
@@ -487,7 +486,6 @@ usage = "usage: kjv [flags] [reference...]\n"
     "  -B num  number of verses of context before matching verses\n"
     "  -C      show matching verses in context of the chapter\n"
     "  -l      list books\n"
-    "  -W      no line wrap\n"
     "  -h      show help\n"
     "\n"
     "Reference:\n"
@@ -515,7 +513,6 @@ int
 main(int argc, char *argv[])
 {
     kjv_config config = {
-        .linewrap = true,
         .maximum_line_length = 80,
 
         .context_before = 0,
@@ -548,9 +545,6 @@ main(int argc, char *argv[])
             break;
         case 'l':
             list_books = true;
-            break;
-        case 'W':
-            config.linewrap = false;
             break;
         case 'h':
             printf("%s", usage);
