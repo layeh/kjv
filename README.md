@@ -11,7 +11,6 @@ Read the Word of God from your terminal
       -B num  number of verses of context before matching verses
       -C      show matching verses in context of the chapter
       -l      list books
-      -W      no line wrap
       -h      show help
 
     Reference:
