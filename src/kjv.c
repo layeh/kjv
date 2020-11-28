@@ -38,7 +38,7 @@ typedef struct {
 
 typedef struct kjv_ref {
     int type;
-    char book[64];
+    unsigned int book;
     unsigned int chapter;
     unsigned int chapter_end;
     unsigned int verse;
@@ -64,6 +64,66 @@ kjv_freeref(kjv_ref *ref)
     }
 }
 
+
+static bool
+kjv_bookequal(const char *a, const char *b, bool short_match)
+{
+    for (size_t i = 0, j = 0; ; ) {
+        if ((!a[i] && !b[j]) || (short_match && !b[j])) {
+            return true;
+        } else if (a[i] == ' ') {
+            i++;
+        } else if (b[j] == ' ') {
+            j++;
+        } else if (tolower(a[i]) != tolower(b[j])) {
+            return false;
+        } else {
+            i++;
+            j++;
+        }
+    }
+}
+
+static bool
+kjv_book_matches(const kjv_book *book, const char *s)
+{
+    return kjv_bookequal(book->name, s, false) ||
+        kjv_bookequal(book->abbr, s, false) ||
+        kjv_bookequal(book->name, s, true);
+}
+
+static int
+kjv_book_fromname(const char *s)
+{
+    for (int i = 0; i < kjv_books_length; i++) {
+        const kjv_book *book = &kjv_books[i];
+        if (kjv_book_matches(book, s)) {
+            return book->number;
+        }
+    }
+    return 0;
+}
+
+static int
+kjv_scanbook(const char *s, int *n)
+{
+    int i;
+    int mode = 0;
+    for (i = 0; s[i]; i++) {
+        if (s[i] == ' ') {
+            continue;
+        } else if (('a' <= s[i] && s[i] <= 'z') || ('A' <= s[i] && s[i] <= 'Z')) {
+            mode = 1;
+        } else if ('0' <= s[i] && s[i] <= '9' && mode == 0) {
+            continue;
+        } else {
+            break;
+        }
+    }
+    *n = i;
+    return mode >= 1;
+}
+
 static int
 kjv_parseref(kjv_ref *ref, const char *ref_str)
 {
@@ -79,7 +139,7 @@ kjv_parseref(kjv_ref *ref, const char *ref_str)
     // 9. <book>:?<chapter>/search
 
     ref->type = 0;
-    ref->book[0] = '\0';
+    ref->book = 0;
     ref->chapter = 0;
     ref->chapter_end = 0;
     ref->verse = 0;
@@ -91,13 +151,11 @@ kjv_parseref(kjv_ref *ref, const char *ref_str)
     regfree(&ref->search);
 
     int n = 0;
-
-    sscanf(ref_str, "%*1[1-3]%n", &n);
-    bool has_booknum = n > 0;
-    if (has_booknum && sscanf(ref_str, "%1[1-3]%62[a-zA-Z ]%n", &ref->book[0], &ref->book[1], &n) == 2) {
-        ref_str = &ref_str[n];
-    } else if (!has_booknum && sscanf(ref_str, "%63[a-zA-Z ]%n", &ref->book[0], &n) == 1) {
+    if (kjv_scanbook(ref_str, &n) == 1) {
         // 1, 2, 3, 3a, 4, 5, 6, 8, 9
+        char *bookname = strndup(ref_str, n);
+        ref->book = kjv_book_fromname(bookname);
+        free(bookname);
         ref_str = &ref_str[n];
     } else if (ref_str[0] == '/') {
         // 7
@@ -217,60 +275,33 @@ str_join(size_t n, char *strs[])
 }
 
 static bool
-kjv_bookequal(const char *a, const char *b, bool short_match)
-{
-    for (size_t i = 0, j = 0; ; ) {
-        if ((!a[i] && !b[j]) || (short_match && !b[j])) {
-            return true;
-        } else if (a[i] == ' ') {
-            i++;
-        } else if (b[j] == ' ') {
-            j++;
-        } else if (tolower(a[i]) != tolower(b[j])) {
-            return false;
-        } else {
-            i++;
-            j++;
-        }
-    }
-}
-
-static bool
-kjv_book_matches(const char *book, const kjv_verse *verse)
-{
-    return kjv_bookequal(verse->book_name, book, false) ||
-        kjv_bookequal(verse->book_abbr, book, false) ||
-        kjv_bookequal(verse->book_name, book, true);
-}
-
-static bool
 kjv_verse_matches(const kjv_ref *ref, const kjv_verse *verse)
 {
     switch (ref->type) {
         case KJV_REF_SEARCH:
-            return (ref->book[0] == '\0' || kjv_book_matches(ref->book, verse)) &&
+            return (ref->book == 0 || ref->book == verse->book) &&
                 (ref->chapter == 0 || verse->chapter == ref->chapter) &&
                 regexec(&ref->search, verse->text, 0, NULL, 0) == 0;
 
         case KJV_REF_EXACT:
-            return kjv_book_matches(ref->book, verse) &&
+            return ref->book == verse->book &&
                 (ref->chapter == 0 || ref->chapter == verse->chapter) &&
                 (ref->verse == 0 || ref->verse == verse->verse);
 
         case KJV_REF_EXACT_SET:
-            return kjv_book_matches(ref->book, verse) &&
+            return ref->book == verse->book &&
                 (ref->chapter == 0 || verse->chapter == ref->chapter) &&
                 intset_contains(ref->verse_set, verse->verse);
 
         case KJV_REF_RANGE:
-            return kjv_book_matches(ref->book, verse) &&
+            return ref->book == verse->book &&
                 ((ref->chapter_end == 0 && ref->chapter == verse->chapter) ||
                     (verse->chapter >= ref->chapter && verse->chapter <= ref->chapter_end)) &&
                 (ref->verse == 0 || verse->verse >= ref->verse) &&
                 (ref->verse_end == 0 || verse->verse <= ref->verse_end);
 
         case KJV_REF_RANGE_EXT:
-            return kjv_book_matches(ref->book, verse) &&
+            return ref->book == verse->book &&
                 (
                     (verse->chapter == ref->chapter && verse->verse >= ref->verse && ref->chapter != ref->chapter_end) ||
                     (verse->chapter > ref->chapter && verse->chapter < ref->chapter_end) ||
@@ -427,7 +458,7 @@ kjv_output(const kjv_ref *ref, FILE *f, const kjv_config *config)
             if (last_printed != NULL) {
                 fprintf(f, "\n");
             }
-            fprintf(f, ESC_UNDERLINE "%s" ESC_RESET "\n\n", verse->book_name);
+            fprintf(f, ESC_UNDERLINE "%s" ESC_RESET "\n\n", kjv_books[verse->book - 1].name);
         }
         kjv_output_verse(verse, f, config);
         last_printed = verse;
@@ -559,12 +590,9 @@ main(int argc, char *argv[])
     }
 
     if (list_books) {
-        char *last_book_printed = NULL;
-        for (int i = 0; i < kjv_verses_length; i++) {
-            if (last_book_printed == NULL || strcmp(kjv_verses[i].book_name, last_book_printed) != 0) {
-                printf("%s (%s)\n", kjv_verses[i].book_name, kjv_verses[i].book_abbr);
-                last_book_printed = kjv_verses[i].book_name;
-            }
+        for (int i = 0; i < kjv_books_length; i++) {
+            kjv_book *book = &kjv_books[i];
+            printf("%s (%s)\n", book->name, book->abbr);
         }
         return 0;
     }
