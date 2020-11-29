@@ -113,9 +113,9 @@ kjv_scanbook(const char *s, int *n)
         if (s[i] == ' ') {
             continue;
         } else if (('a' <= s[i] && s[i] <= 'z') || ('A' <= s[i] && s[i] <= 'Z')) {
+            mode = 2;
+        } else if ('0' <= s[i] && s[i] <= '9' && 0 <= mode && mode <= 1) {
             mode = 1;
-        } else if ('0' <= s[i] && s[i] <= '9' && mode == 0) {
-            continue;
         } else {
             break;
         }
