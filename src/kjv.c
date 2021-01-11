@@ -460,6 +460,15 @@ kjv_output(const kjv_ref *ref, FILE *f, const kjv_config *config)
             }
             fprintf(f, ESC_UNDERLINE "%s" ESC_RESET "\n\n", kjv_books[verse->book - 1].name);
         }
+        if (ref->type != KJV_REF_SEARCH) {
+            for (int i = 0; i < kjv_subheadings_length; i++) {
+                const kjv_subheading *subheading = &kjv_subheadings[i];
+                if (verse->book == subheading->book && verse->chapter == subheading->chapter &&
+                    verse->verse == subheading->verse) {
+                    fprintf(f, "\n" ESC_BOLD "	%s" ESC_RESET "\n", subheading->subheading);
+                }
+            }
+        }
         kjv_output_verse(verse, f, config);
         last_printed = verse;
     }
