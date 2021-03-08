@@ -9,8 +9,8 @@ Read the Word of God from your terminal
     usage: kjv [flags] [reference...]
 
     Flags:
-      -A num  number of verses of context after matching verses
-      -B num  number of verses of context before matching verses
+      -A num  show num verses of context after matching verses
+      -B num  show num verses of context before matching verses
       -C      show matching verses in context of the chapter
       -l      list books
       -h      show help
