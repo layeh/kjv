@@ -134,9 +134,6 @@ kjv_render(const kjv_ref *ref, const kjv_config *config)
     }
     fclose(output);
     waitpid(pid, NULL, 0);
-    if (!printed) {
-        printf("unknown reference\n");
-    }
     return 0;
 }
 
