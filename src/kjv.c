@@ -164,7 +164,7 @@ kjv_parseref(kjv_ref *ref, const char *ref_str)
         return 1;
     }
 
-    if (sscanf(ref_str, ":%u%n", &ref->chapter, &n) == 1 || sscanf(ref_str, "%u%n", &ref->chapter, &n) == 1) {
+    if (sscanf(ref_str, ": %u %n", &ref->chapter, &n) == 1 || sscanf(ref_str, "%u %n", &ref->chapter, &n) == 1) {
         // 2, 3, 3a, 4, 5, 6, 9
         ref_str = &ref_str[n];
     } else if (ref_str[0] == '/') {
@@ -178,10 +178,10 @@ kjv_parseref(kjv_ref *ref, const char *ref_str)
         return 1;
     }
 
-    if (sscanf(ref_str, ":%u%n", &ref->verse, &n) == 1) {
+    if (sscanf(ref_str, ": %u %n", &ref->verse, &n) == 1) {
         // 3, 3a, 5, 6
         ref_str = &ref_str[n];
-    } else if (sscanf(ref_str, "-%u%n", &ref->chapter_end, &n) == 1) {
+    } else if (sscanf(ref_str, "- %u %n", &ref->chapter_end, &n) == 1) {
         // 4
         if (ref_str[n] != '\0') {
             return 1;
@@ -200,7 +200,7 @@ kjv_parseref(kjv_ref *ref, const char *ref_str)
     }
 
     unsigned int value;
-    int ret = sscanf(ref_str, "-%u%n", &value, &n);
+    int ret = sscanf(ref_str, "- %u %n", &value, &n);
     if (ret == 1 && ref_str[n] == '\0') {
         // 5
         ref->verse_end = value;
@@ -214,14 +214,14 @@ kjv_parseref(kjv_ref *ref, const char *ref_str)
         // 3
         ref->type = KJV_REF_EXACT;
         return 0;
-    } else if (sscanf(ref_str, ",%u%n", &value, &n) == 1) {
+    } else if (sscanf(ref_str, ", %u %n", &value, &n) == 1) {
         // 3a
         ref->verse_set = intset_new();
         intset_add(ref->verse_set, ref->verse);
         intset_add(ref->verse_set, value);
         ref_str = &ref_str[n];
         while (true) {
-            if (sscanf(ref_str, ",%u%n", &value, &n) != 1) {
+            if (sscanf(ref_str, ", %u %n", &value, &n) != 1) {
                 break;
             }
             intset_add(ref->verse_set, value);
@@ -236,7 +236,7 @@ kjv_parseref(kjv_ref *ref, const char *ref_str)
         return 1;
     }
 
-    if (sscanf(ref_str, ":%u%n", &ref->verse_end, &n) == 1 && ref_str[n] == '\0') {
+    if (sscanf(ref_str, ": %u %n", &ref->verse_end, &n) == 1 && ref_str[n] == '\0') {
         // 6
         ref->type = KJV_REF_RANGE_EXT;
         return 0;
