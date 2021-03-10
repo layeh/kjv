@@ -52,16 +52,17 @@ kjv_verse_matches(const kjv_ref *ref, const kjv_verse *verse)
 static int
 kjv_chapter_bounds(int i, int direction, int maximum_steps)
 {
-    assert(direction == -1 || direction == 1);
+    assert(direction == KJV_DIRECTION_BEFORE || direction == KJV_DIRECTION_AFTER);
 
     int steps = 0;
     for ( ; 0 <= i && i < kjv_verses_length; i += direction) {
-        if (maximum_steps != -1 && steps >= maximum_steps) {
+        bool step_limit = (maximum_steps != -1 && steps >= maximum_steps) ||
+            (direction == KJV_DIRECTION_BEFORE && i == 0) ||
+            (direction == KJV_DIRECTION_AFTER && i + 1 == kjv_verses_length);
+        if (step_limit) {
             break;
         }
-        if ((direction == -1 && i == 0) || (direction == 1 && i + 1 == kjv_verses_length)) {
-            break;
-        }
+
         const kjv_verse *current = &kjv_verses[i], *next = &kjv_verses[i + direction];
         if (current->book != next->book || current->chapter != next->chapter) {
             break;
