@@ -19,18 +19,11 @@ License: Public domain
 #include <ctype.h>
 #include <sys/ioctl.h>
 
+#include "kjv_config.h"
 #include "kjv_data.h"
 #include "kjv_ref.h"
 #include "intset.h"
 #include "strutil.h"
-
-typedef struct {
-    int maximum_line_length;
-
-    int context_before;
-    int context_after;
-    bool context_chapter;
-} kjv_config;
 
 static bool
 kjv_verse_matches(const kjv_ref *ref, const kjv_verse *verse)

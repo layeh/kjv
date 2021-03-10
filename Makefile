@@ -9,7 +9,7 @@ LDLIBS += -lreadline
 kjv: $(OBJS)
 	$(CC) -o $@ $(LDFLAGS) $(OBJS) $(LDLIBS)
 
-src/kjv_main.o: src/kjv_main.c src/kjv_data.h src/kjv_ref.h src/intset.h src/strutil.h
+src/kjv_main.o: src/kjv_main.c src/kjv_config.h src/kjv_data.h src/kjv_ref.h src/intset.h src/strutil.h
 
 src/kjv_ref.o: src/kjv_ref.h src/kjv_ref.c src/intset.h src/kjv_data.h
 
