@@ -19,7 +19,7 @@ License: Public domain
 #include <ctype.h>
 #include <sys/ioctl.h>
 
-#include "data.h"
+#include "kjv_data.h"
 #include "intset.h"
 
 typedef struct {
