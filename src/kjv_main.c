@@ -32,7 +32,14 @@ License: Public domain
 static void
 kjv_output_verse(const kjv_verse *verse, FILE *f, const kjv_config *config)
 {
-    fprintf(f, ESC_BOLD "%d:%d" ESC_RESET "\t", verse->chapter, verse->verse);
+    fprintf(
+        f,
+        config->highlighting ?
+            ESC_BOLD "%d:%d" ESC_RESET "\t" :
+            "%d:%d\t",
+        verse->chapter, verse->verse
+    );
+
     char verse_text[1024];
     strcpy(verse_text, verse->text);
     size_t characters_printed = 0;
@@ -73,7 +80,13 @@ kjv_output(const kjv_ref *ref, FILE *f, const kjv_config *config)
             if (last_printed != NULL) {
                 fprintf(f, "\n");
             }
-            fprintf(f, ESC_UNDERLINE "%s" ESC_RESET "\n\n", kjv_books[verse->book - 1].name);
+            fprintf(
+                f,
+                config->highlighting ?
+                    ESC_UNDERLINE "%s" ESC_RESET "\n\n" :
+                    "%s\n\n",
+                kjv_books[verse->book - 1].name
+            );
         }
         kjv_output_verse(verse, f, config);
         last_printed = verse;
@@ -134,6 +147,8 @@ usage = "usage: kjv [flags] [reference...]\n"
     "  -A num  show num verses of context after matching verses\n"
     "  -B num  show num verses of context before matching verses\n"
     "  -C      show matching verses in context of the chapter\n"
+    "  -E      no highlighting of chapters or verse numbers\n"
+    "          (default when output is not a TTY)\n"
     "  -l      list books\n"
     "  -h      show help\n"
     "\n"
@@ -162,6 +177,7 @@ int
 main(int argc, char *argv[])
 {
     kjv_config config = {
+        .highlighting = isatty(STDOUT_FILENO) == 1,
         .maximum_line_length = 80,
 
         .context_before = 0,
@@ -172,7 +188,7 @@ main(int argc, char *argv[])
     bool list_books = false;
 
     opterr = 0;
-    for (int opt; (opt = getopt(argc, argv, "A:B:ClWh")) != -1; ) {
+    for (int opt; (opt = getopt(argc, argv, "A:B:CElWh")) != -1; ) {
         char *endptr;
         switch (opt) {
         case 'A':
@@ -191,6 +207,9 @@ main(int argc, char *argv[])
             break;
         case 'C':
             config.context_chapter = true;
+            break;
+        case 'E':
+            config.highlighting = false;
             break;
         case 'l':
             list_books = true;

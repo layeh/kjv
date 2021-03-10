@@ -1,6 +1,9 @@
 #pragma once
 
+#include <stdbool.h>
+
 typedef struct {
+    bool highlighting;
     int maximum_line_length;
 
     int context_before;
