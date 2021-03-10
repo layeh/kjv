@@ -22,6 +22,7 @@ License: Public domain
 #include "kjv_data.h"
 #include "kjv_ref.h"
 #include "intset.h"
+#include "strutil.h"
 
 typedef struct {
     int maximum_line_length;
@@ -30,27 +31,6 @@ typedef struct {
     int context_after;
     bool context_chapter;
 } kjv_config;
-
-static char *
-str_join(size_t n, char *strs[])
-{
-    size_t length = 0;
-    for (size_t i = 0; i < n; i++) {
-        if (i > 0) {
-            length++;
-        }
-        length += strlen(strs[i]);
-    }
-    char *str = malloc(length + 1);
-    str[0] = '\0';
-    for (size_t i = 0; i < n; i++) {
-        if (i > 0) {
-            strcat(str, " ");
-        }
-        strcat(str, strs[i]);
-    }
-    return str;
-}
 
 static bool
 kjv_verse_matches(const kjv_ref *ref, const kjv_verse *verse)
