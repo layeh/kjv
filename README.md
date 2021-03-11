@@ -12,8 +12,8 @@ Read the Word of God from your terminal
       -A num  show num verses of context after matching verses
       -B num  show num verses of context before matching verses
       -C      show matching verses in context of the chapter
-      -E      no highlighting of chapters or verse numbers
-              (default when output is not a TTY)
+      -e      highlighting of chapters and verse numbers
+              (default when output is a TTY)
       -l      list books
       -h      show help
 

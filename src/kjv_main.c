@@ -144,8 +144,8 @@ usage = "usage: kjv [flags] [reference...]\n"
     "  -A num  show num verses of context after matching verses\n"
     "  -B num  show num verses of context before matching verses\n"
     "  -C      show matching verses in context of the chapter\n"
-    "  -E      no highlighting of chapters or verse numbers\n"
-    "          (default when output is not a TTY)\n"
+    "  -e      highlighting of chapters and verse numbers\n"
+    "          (default when output is a TTY)\n"
     "  -l      list books\n"
     "  -h      show help\n"
     "\n"
@@ -185,7 +185,7 @@ main(int argc, char *argv[])
     bool list_books = false;
 
     opterr = 0;
-    for (int opt; (opt = getopt(argc, argv, "A:B:CElWh")) != -1; ) {
+    for (int opt; (opt = getopt(argc, argv, "A:B:CelWh")) != -1; ) {
         char *endptr;
         switch (opt) {
         case 'A':
@@ -205,8 +205,8 @@ main(int argc, char *argv[])
         case 'C':
             config.context_chapter = true;
             break;
-        case 'E':
-            config.highlighting = false;
+        case 'e':
+            config.highlighting = true;
             break;
         case 'l':
             list_books = true;
