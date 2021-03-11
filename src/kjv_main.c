@@ -4,23 +4,17 @@ kjv: Read the Word of God from your terminal
 License: Public domain
 */
 
-#include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
 #include <stdbool.h>
-#include <string.h>
 #include <signal.h>
 #include <readline/readline.h>
 #include <readline/history.h>
-#include <sys/types.h>
-#include <sys/wait.h>
-#include <ctype.h>
 #include <sys/ioctl.h>
 
 #include "kjv_config.h"
 #include "kjv_data.h"
-#include "kjv_match.h"
 #include "kjv_ref.h"
 #include "kjv_render.h"
 #include "strutil.h"

@@ -5,6 +5,7 @@
 
 #include "kjv_data.h"
 #include "kjv_match.h"
+#include "intset.h"
 
 static bool
 kjv_verse_matches(const kjv_ref *ref, const kjv_verse *verse)
