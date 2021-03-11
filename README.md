@@ -14,6 +14,9 @@ Read the Word of God from your terminal
       -C      show matching verses in context of the chapter
       -e      highlighting of chapters and verse numbers
               (default when output is a TTY)
+      -p      output to less with chapter grouping, spacing, indentation,
+              and line wrapping
+              (default when output is a TTY)
       -l      list books
       -h      show help
 

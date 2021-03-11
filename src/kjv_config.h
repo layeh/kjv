@@ -4,6 +4,8 @@
 
 typedef struct {
     bool highlighting;
+    bool pretty;
+
     int maximum_line_length;
 
     int context_before;

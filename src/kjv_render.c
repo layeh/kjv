@@ -60,26 +60,41 @@ kjv_output(const kjv_ref *ref, FILE *f, const kjv_config *config)
     kjv_verse *last_printed = NULL;
     for (int verse_id; (verse_id = kjv_next_verse(ref, config, &next)) != -1; ) {
         kjv_verse *verse = &kjv_verses[verse_id];
-        if (last_printed == NULL || verse->book != last_printed->book) {
-            if (last_printed != NULL) {
-                fprintf(f, "\n");
+        kjv_book *book = &kjv_books[verse->book - 1];
+
+        if (config->pretty) {
+            if (last_printed == NULL || verse->book != last_printed->book) {
+                if (last_printed != NULL) {
+                    fprintf(f, "\n");
+                }
+                fprintf(
+                    f,
+                    config->highlighting ?
+                        ESC_UNDERLINE "%s" ESC_RESET "\n\n" :
+                        "%s\n\n",
+                    book->name
+                );
             }
+            kjv_output_verse(verse, f, config);
+        } else {
             fprintf(
                 f,
                 config->highlighting ?
-                    ESC_UNDERLINE "%s" ESC_RESET "\n\n" :
-                    "%s\n\n",
-                kjv_books[verse->book - 1].name
+                    ESC_UNDERLINE "%s" ESC_RESET " " ESC_BOLD "%d:%d" ESC_RESET "  %s\n" :
+                    "%s %d:%d  %s\n",
+                book->name,
+                verse->chapter,
+                verse->verse,
+                verse->text
             );
         }
-        kjv_output_verse(verse, f, config);
         last_printed = verse;
     }
     return last_printed != NULL;
 }
 
-int
-kjv_render(const kjv_ref *ref, const kjv_config *config)
+static int
+kjv_render_pretty(const kjv_ref *ref, const kjv_config *config)
 {
     int fds[2];
     if (pipe(fds) == -1) {
@@ -118,5 +133,15 @@ kjv_render(const kjv_ref *ref, const kjv_config *config)
     }
     fclose(output);
     waitpid(pid, NULL, 0);
+    return 0;
+}
+
+int
+kjv_render(const kjv_ref *ref, const kjv_config *config)
+{
+    if (config->pretty) {
+        return kjv_render_pretty(ref, config);
+    }
+    kjv_output(ref, stdout, config);
     return 0;
 }

@@ -28,6 +28,9 @@ usage = "usage: kjv [flags] [reference...]\n"
     "  -C      show matching verses in context of the chapter\n"
     "  -e      highlighting of chapters and verse numbers\n"
     "          (default when output is a TTY)\n"
+    "  -p      output to less with chapter grouping, spacing, indentation,\n"
+    "          and line wrapping\n"
+    "          (default when output is a TTY)\n"
     "  -l      list books\n"
     "  -h      show help\n"
     "\n"
@@ -55,8 +58,11 @@ usage = "usage: kjv [flags] [reference...]\n"
 int
 main(int argc, char *argv[])
 {
+    bool is_atty = isatty(STDOUT_FILENO) == 1;
     kjv_config config = {
-        .highlighting = isatty(STDOUT_FILENO) == 1,
+        .highlighting = is_atty,
+        .pretty = is_atty,
+
         .maximum_line_length = 80,
 
         .context_before = 0,
@@ -67,7 +73,7 @@ main(int argc, char *argv[])
     bool list_books = false;
 
     opterr = 0;
-    for (int opt; (opt = getopt(argc, argv, "A:B:CelWh")) != -1; ) {
+    for (int opt; (opt = getopt(argc, argv, "A:B:CeplWh")) != -1; ) {
         char *endptr;
         switch (opt) {
         case 'A':
@@ -89,6 +95,9 @@ main(int argc, char *argv[])
             break;
         case 'e':
             config.highlighting = true;
+            break;
+        case 'p':
+            config.pretty = true;
             break;
         case 'l':
             list_books = true;
