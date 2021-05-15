@@ -8,6 +8,10 @@ This fork surrounds the Pure Cambridge Edition (PCE) of the King James
 Version (KJV)—a version of the KJV based off of critical scholarship of
 various older publications of the Cambridge editions of the KJV.
 
+The PCE text is taken from [here](http://bibleprotector.com/).  A
+plain-text, tab-separated version was available.  It has been
+lightly-modified for style.
+
 ## Usage
 
     usage: kjv [flags] [reference...]
