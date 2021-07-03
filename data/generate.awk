@@ -1,3 +1,5 @@
+#!/usr/bin/env -S awk -f
+
 BEGIN {
     #  $1 Book name
     #  $2 Book abbreviation
