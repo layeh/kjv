@@ -43,6 +43,10 @@ kjv_output_verse(const kjv_verse *verse, FILE *f, const kjv_config *config)
         word = strtok(NULL, " ");
     }
     fprintf(f, "\n");
+
+    if (config->blank_line_after_verse) {
+        fprintf(f, "\n");
+    }
 }
 
 static bool
@@ -145,3 +149,4 @@ kjv_render(const kjv_ref *ref, const kjv_config *config)
     kjv_output(ref, stdout, config);
     return 0;
 }
+

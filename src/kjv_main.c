@@ -25,12 +25,15 @@ usage = "usage: kjv [flags] [reference...]\n"
     "Flags:\n"
     "  -A num  show num verses of context after matching verses\n"
     "  -B num  show num verses of context before matching verses\n"
+    "  -W num  enable line wrap to a specific width\n"
     "  -C      show matching verses in context of the chapter\n"
     "  -e      highlighting of chapters and verse numbers\n"
     "          (default when output is a TTY)\n"
     "  -p      output to less with chapter grouping, spacing, indentation,\n"
     "          and line wrapping\n"
     "          (default when output is a TTY)\n"
+    "  -b      have a blank line after each verse\n"
+    "  -i      remove all highlighting\n"
     "  -l      list books\n"
     "  -h      show help\n"
     "\n"
@@ -68,12 +71,14 @@ main(int argc, char *argv[])
         .context_before = 0,
         .context_after = 0,
         .context_chapter = false,
+        .blank_line_after_verse = false,
+        .change_line_width = true,
     };
 
     bool list_books = false;
 
     opterr = 0;
-    for (int opt; (opt = getopt(argc, argv, "A:B:CeplWh")) != -1; ) {
+    for (int opt; (opt = getopt(argc, argv, "A:B:W:Cbepilh")) != -1; ) {
         char *endptr;
         switch (opt) {
         case 'A':
@@ -90,11 +95,25 @@ main(int argc, char *argv[])
                 return 1;
             }
             break;
+        case 'W':
+            config.maximum_line_length = strtol(optarg, &endptr, 10);
+            if (endptr[0] != '\0') {
+                fprintf(stderr, "kjv: invalid flag value for -W\n\n%s", usage);
+                return 1;
+            }
+            config.change_line_width = false;
+            break;
         case 'C':
             config.context_chapter = true;
             break;
+        case 'b':
+            config.blank_line_after_verse = true;
+            break;
         case 'e':
             config.highlighting = true;
+            break;
+        case 'i':
+            config.highlighting = false;
             break;
         case 'p':
             config.pretty = true;
@@ -120,7 +139,7 @@ main(int argc, char *argv[])
     }
 
     struct winsize ttysize;
-    if (ioctl(STDOUT_FILENO, TIOCGWINSZ, &ttysize) == 0 && ttysize.ws_col > 0) {
+    if (config.change_line_width && ioctl(STDOUT_FILENO, TIOCGWINSZ, &ttysize) == 0 && ttysize.ws_col > 0) {
         config.maximum_line_length = ttysize.ws_col;
     }
 
@@ -155,3 +174,4 @@ main(int argc, char *argv[])
 
     return 0;
 }
+

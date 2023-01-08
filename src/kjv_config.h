@@ -11,4 +11,7 @@ typedef struct {
     int context_before;
     int context_after;
     bool context_chapter;
+    bool blank_line_after_verse;
+    bool change_line_width;
 } kjv_config;
+
