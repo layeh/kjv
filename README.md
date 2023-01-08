@@ -45,7 +45,7 @@ Read the Word of God from your terminal
 
 kjv can be built by cloning the repository and then running make:
 
-    git clone https://github.com/bontibon/kjv.git
+    git clone https://github.com/layeh/kjv.git
     cd kjv
     make
 
