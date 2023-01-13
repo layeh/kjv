@@ -11,12 +11,15 @@ Read the Word of God from your terminal
     Flags:
       -A num  show num verses of context after matching verses
       -B num  show num verses of context before matching verses
+      -W num  enable line wrap to a specific width
       -C      show matching verses in context of the chapter
       -e      highlighting of chapters and verse numbers
               (default when output is a TTY)
       -p      output to less with chapter grouping, spacing, indentation,
               and line wrapping
               (default when output is a TTY)
+      -b      have a blank line after each verse
+      -i      remove all highlighting
       -l      list books
       -h      show help
 
