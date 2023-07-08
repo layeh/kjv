@@ -9,7 +9,7 @@
 #include "kjv_match.h"
 #include "kjv_render.h"
 
-#define ESC_BOLD "\033[1m"
+#define ESC_BOLD "\033[1;97m"
 #define ESC_UNDERLINE "\033[4m"
 #define ESC_RESET "\033[m"
 
